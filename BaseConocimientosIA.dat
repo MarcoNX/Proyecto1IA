@@ -1,6 +1,6 @@
 [
 	class
-	(	
+	(
 		top,none,
 		[],
 		[],
@@ -60,7 +60,7 @@
 				[
 					[propiedad_color=>amarillo,0],
 					[propiedad_carisma=>risueno,0],
-					[propiedad_tamaño=>pequeno,0],
+					[propiedad_tamano=>pequeno,0],
 					[propiedad_tierno=>yes,0]
 				],
 				[
@@ -80,7 +80,7 @@
 		[
 			[id=>pete,
 				[
-					[propiedad_tamano=>chico,0]
+					[propiedad_tamano=>pequeno,0]
 				],
 				[
 					[not(relacion_amigo=>arthur),0]
