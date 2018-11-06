@@ -25,7 +25,7 @@
 %---------- Variable de entorno ---------------------
 
 setEnv:- %Inicializa variables de entorno
-	setenv('ProyectoIA','C:/Users/Documents/GitHub/Proyecto1IA/BaseConocimientosIA.dat').%Constante de ubicaci�n del KB en el disco duro
+	setenv('ProyectoIA','C:/Users/rodri/Documents/GitHub/Proyecto1IA/BaseConocimientosIA.txt').%Constante de ubicaci�n del KB en el disco duro
 
 updEnv(KB):- %Actualiza KB en memoria y guarda en disco duro
 	save_kb(KB).
@@ -40,7 +40,7 @@ open_kb(KB):-
 	open(KBPATH,read,Stream),
 	readclauses(Stream,X),
 	close(Stream),
-	atom_to_term_conversion(X,KB).
+	atom_to_term(X,KB).
 
 save_kb(KB):-
 	getenv('ProyectoIA',KBPATH),
@@ -51,9 +51,9 @@ save_kb(KB):-
 readclauses(InStream,W) :-
         get0(InStream,Char),
         checkCharAndReadRest(Char,Chars,InStream),
-	atom_chars(W,Chars).
+	      atom_chars(W,Chars).
 
-checkCharAndReadRest(-1,[],_) :- !.  % End of Stream
+/*checkCharAndReadRest(-1,[],_) :- !.  % End of Stream
 checkCharAndReadRest(end_of_file,[],_) :- !.
 checkCharAndReadRest(Char,[Char|Chars],InStream) :-
         get0(InStream,NextChar),
@@ -73,7 +73,7 @@ atom_to_term_conversion(ATOM, TERM) :-
 	 atom_to_chars('.',PTO),
 	 append(STR,PTO,STR_PTO),
 	 read_from_chars(STR_PTO,TERM).
-
+*/
 
 % ===>Lee el caracter y conserva el resto de la cadena
 	checkCharAndReadRest(-1,[],_) :- !.
@@ -99,9 +99,6 @@ atom_to_term_conversion(ATOM, TERM) :-
 %----------------------------------------
 % Administration of lists
 %----------------------------------------
-
-
-
 
 %------------------------------------------------------FUNCIONES B�SICAS--------------------------------------------------------
 
