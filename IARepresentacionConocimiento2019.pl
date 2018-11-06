@@ -25,7 +25,7 @@
 %---------- Variable de entorno ---------------------
 
 setEnv:- %Inicializa variables de entorno
-	setenv('ProyectoIA','C:/Users/Documents/GitHub/Proyecto1IA/BaseConocimientosIA.dat').%Constante de ubicaci�n del KB en el disco duro
+	setenv('ProyectoIA','C:/Users/Documents/GitHub/Proyecto1IA/BaseConocimientosIA.txt').%Constante de ubicaci�n del KB en el disco duro
 
 updEnv(KB):- %Actualiza KB en memoria y guarda en disco duro
 	save_kb(KB).

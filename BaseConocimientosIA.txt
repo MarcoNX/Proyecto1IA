@@ -46,7 +46,7 @@
 	),
 	class(aves,animales,
 		[
-			[propiedad_vuela=>yes,0],
+			[propiedad_vuela,0],
 			[propiedad_nace=>huevo,0]
 		],
 		[],
@@ -56,7 +56,7 @@
 					[propiedad_color=>amarillo,0],
 					[propiedad_carisma=>risueno,0],
 					[propiedad_tamano=>pequeno,0],
-					[propiedad_tierno=>yes,0]
+					[propiedad_tierno,0]
 				],
 				[
 					[relacion_mascota=>hominidos,0]
@@ -66,7 +66,7 @@
 	),
 	class(pinguinos,aves,
 		[
-			[propiedad_vuelan=>no,0]
+			[not(propiedad_vuelan),0]
 		],
 		[
 			[relacion_come=>peces,0]
