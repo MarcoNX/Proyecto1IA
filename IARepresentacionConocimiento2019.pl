@@ -1,21 +1,21 @@
 % Inteligencia Artificial Semestre 1 2019-1
 
-  
-% Ing. Jessica Sarahi Méndez Rincon
+
+% Ing. Jessica Sarahi Mï¿½ndez Rincon
 % Ing. Juan Daniel Lawrence Pedroza
-% Ing. Marco Tulio Sánchez Rodríguez
-% Ing. Nahet Cortez Fuerte 
-% Ing. Rodrigo Terpán Arenas
+% Ing. Marco Tulio Sï¿½nchez Rodrï¿½guez
+% Ing. Nahet Cortez Fuerte
+% Ing. Rodrigo Terpï¿½n Arenas
 
-% Profesor: Dr. Arturo 
-% Ayudante: Iván
+% Profesor: Dr. Arturo
+% Ayudante: Ivï¿½n
 
 
 
-%Proposito General: Procesar información jerárquica de Individuos, clases y Propiedades a partir de una Base de datos.
-%Se desarrollará de forma modular, de acuerdo a los criterios impuestos en el requerimiento del proyecto.
+%Proposito General: Procesar informaciï¿½n jerï¿½rquica de Individuos, clases y Propiedades a partir de una Base de datos.
+%Se desarrollarï¿½ de forma modular, de acuerdo a los criterios impuestos en el requerimiento del proyecto.
 %Estructura de Conocimiento
-%nombre,padre, propiedades,relaciones,Objetos 
+%nombre,padre, propiedades,relaciones,Objetos
 
 
 %------------------------------------------------------------------------
@@ -25,7 +25,7 @@
 %---------- Variable de entorno ---------------------
 
 setEnv:- %Inicializa variables de entorno
-	setenv('ProyectoIA','C:/Prolog/BaseConocimientosIA.dat').%Constante de ubicación del KB en el disco duro
+	setenv('ProyectoIA','C:/Users/Documents/GitHub/Proyecto1IA/BaseConocimientosIA.dat').%Constante de ubicaciï¿½n del KB en el disco duro
 
 updEnv(KB):- %Actualiza KB en memoria y guarda en disco duro
 	save_kb(KB).
@@ -73,21 +73,21 @@ atom_to_term_conversion(ATOM, TERM) :-
 	 atom_to_chars('.',PTO),
 	 append(STR,PTO,STR_PTO),
 	 read_from_chars(STR_PTO,TERM).
-	
+
 
 % ===>Lee el caracter y conserva el resto de la cadena
-	checkCharAndReadRest(-1,[],_) :- !. 
+	checkCharAndReadRest(-1,[],_) :- !.
 	checkCharAndReadRest(end_of_file,[],_) :- !. %Final de la cadena
-	checkCharAndReadRest(Char,[Char|Chars],InStream) :- 
+	checkCharAndReadRest(Char,[Char|Chars],InStream) :-
 				get0(InStream,NextChar),
 				checkCharAndReadRest(NextChar,Chars,InStream).
 
-%===> Compilar una cadena de caracteres de un átomo como un término Prolog
-	atom_to_term(ATOM, TERM) :-	
-		atom(ATOM),	
-		atom_to_chars(ATOM,STR),	
-		atom_to_chars('.',PTO),	
-		append(STR,PTO,STR_PTO),	
+%===> Compilar una cadena de caracteres de un ï¿½tomo como un tï¿½rmino Prolog
+	atom_to_term(ATOM, TERM) :-
+		atom(ATOM),
+		atom_to_chars(ATOM,STR),
+		atom_to_chars('.',PTO),
+		append(STR,PTO,STR_PTO),
 		read_from_chars(STR_PTO,TERM).
 
 :- op(800,xfx,'=>').
@@ -103,14 +103,14 @@ atom_to_term_conversion(ATOM, TERM) :-
 
 
 
-%------------------------------------------------------FUNCIONES BÁSICAS--------------------------------------------------------
+%------------------------------------------------------FUNCIONES Bï¿½SICAS--------------------------------------------------------
 
- %Verify if an element X is in a list 
+ %Verify if an element X is in a list
 %isElement(X,List)
 %Example (n,[b,a,n,a,n,a])
 
 isElement(X,[X|_]).
-isElement(X,[_|T]):-  
+isElement(X,[_|T]):-
 	isElement(X,T).
 
 %Verifica si un objeto existe
@@ -118,16 +118,16 @@ isElement(X,[_|T]):-
 there_is_object(_,[],unknown).
 
 
-there_is_object(Object,[class(_,_,_,_,O)|_],no):-  
+there_is_object(Object,[class(_,_,_,_,O)|_],no):-
 	isElement([id=>not(Object),_,_],O).
 
-there_is_object(Object,[class(_,_,_,_,O)|_],yes):- 
+there_is_object(Object,[class(_,_,_,_,O)|_],yes):-
 	isElement([id=>Object,_,_],O).
 
-there_is_object(Object,[_|T],Answer):- 
+there_is_object(Object,[_|T],Answer):-
 	there_is_object(Object,T,Answer).
-	
-	
+
+
 %Change all ocurrences of an element X in a list for the value Y
 %changeElement(X,Y,InputList,OutputList).
 %Example (p,b,[p,a,p,a,y,a],[p,b,p,b,y,b])
@@ -140,23 +140,23 @@ changeElement(X,Y,[X|T],[Y|N]):-
 changeElement(X,Y,[H|T],[H|N]):-
 	changeElement(X,Y,T,N).
 
-	
-	
+
+
 %--------------------------------------------------------------------------------------------------
-% Modulos para Consulta 
+% Modulos para Consulta
 %--------------------------------------------------------------------------------------------------
 
 
 %------------------------------------------------------CLASES--------------------------------------------------------
 
-%Consult the mother of a class
+%Consulta la clase madre de la clase
 
 mother_of_a_class(_,[],unknown).
 mother_of_a_class(Class,[class(Class,Mother,_,_,_)|_],Mother).
 mother_of_a_class(Class,[_|T],Mother):-
 	mother_of_a_class(Class,T,Mother).
 
-%Verify if a class exists
+%Verifica si la clase existe (De otra forma, no deberÃ­a de pasar nada).
 
 there_is_class(_,[],unknown).
 there_is_class(Class,[class(not(Class),_,_,_,_)|_],no).
@@ -170,16 +170,16 @@ class_of_an_object(_,[],unknown):-!.
 
 
 
-class_of_an_object(Object,[class(C,_,_,_,O)|_],C):- 
+class_of_an_object(Object,[class(C,_,_,_,O)|_],C):-
 isElement([id=>Object,_,_],O).
 
-class_of_an_object(Object,[_|T],Class):- 
+class_of_an_object(Object,[_|T],Class):-
 	class_of_an_object(Object,T,Class).
-	
-	
+
+
 %Consult the ancestors of a class
 
-class_ancestors(Class,KB,ClassAncestors):- 
+class_ancestors(Class,KB,ClassAncestors):-
 	there_is_class(Class,KB,yes),
 	list_of_ancestors(Class,KB,ClassAncestors).
 
@@ -194,7 +194,7 @@ list_of_ancestors(Class,KB,Ancestors):-
 
 %Classes of individual
 
-classes_of_individual(Object,KB,Classes):- 
+classes_of_individual(Object,KB,Classes):-
 	there_is_object(Object,KB,yes),
 	class_of_an_object(Object,KB,X),
 	class_ancestors(X,KB,Y),
@@ -207,11 +207,11 @@ classes_of_individual(Object,KB,Classes):-
 
 
 % Properties of individual
- 
+
 properties_of_individual(Object,KB,Properties):-
 	object_properties(Object,KB,Properties).
 
- 
+
 
 %List all the properties of an object
 
@@ -226,7 +226,7 @@ object_properties(Object,KB,AllProperties):-
 	prefer(Temp,TempPref),
 	delete_repeated_properties(TempPref,AllProperties).
 
-%object_properties(_,_,unknown). 
+%object_properties(_,_,unknown).
 
 
 
@@ -237,10 +237,10 @@ properties_only_in_the_object(Object,[class(_,_,_,_,O)|_],Properties):-
 
 properties_only_in_the_object(Object,[_|T],Properties):-
 	properties_only_in_the_object(Object,T,Properties).
-	
-	
-	
-	
+
+
+
+
 concat_ancestors_properties([],_,[]).
 
 concat_ancestors_properties([Ancestor|T],KB,TFinal):-
@@ -250,9 +250,9 @@ concat_ancestors_properties([Ancestor|T],KB,TFinal):-
 	append(NewProperties,NewT,TFinal).
 
 
-	
-	
-	
+
+
+
 
 properties_only_in_the_class(_,[],[]).
 
@@ -260,21 +260,21 @@ properties_only_in_the_class(Class,[class(Class,_,Properties,_,_)|_],Properties)
 
 properties_only_in_the_class(Class,[_|T],Properties):-
 	properties_only_in_the_class(Class,T,Properties).
-	
-	
-	
-	
-	
+
+
+
+
+
 %%%Prefer handler
 
-prefer(Prop,NewProp):- 
+prefer(Prop,NewProp):-
 	%print(Prop),
 	prefer_extract(Prop,PropE,Pref),
-	delete_repeated_properties(PropE,PropEE),	
+	delete_repeated_properties(PropE,PropEE),
 	%nl,write('aqui'),nl,write(PropE),
 	preordenar(Pref,[],PrefO),
 	prefer_handler(PrefO,PropEE,NewProp).
-	
+
 
 
 prefer_extract([],[],[]).
@@ -420,7 +420,7 @@ delete_repeated_properties([],[]).
 
 delete_repeated_properties([P=>V|T],[P=>V|NewT]):-
 	deleteAllElementsWithSamePropertySingle(P,T,L1),
- 
+
 	deleteElement(not(P=>V),L1,L2),
 	delete_repeated_properties(L2,NewT),!.
 
@@ -438,34 +438,34 @@ delete_repeated_properties([H|T],[H|NewT]):-
 	deleteElement(H,T,L1),
 	deleteElement(not(H),L1,L2),
 	delete_repeated_properties(L2,NewT),!.
-	
-	
-	
+
+
+
 %%Algoritmo de ordenamiento
-ordenar(L, S):- 
-	permutacion(L, S), 
-	ordered(S). 
-permutacion([], []). 
-permutacion(L, [H|R]):- 
-	uno(L, H, L1), 
-	permutacion(L1, R). 
-uno([H|T], H, T). 
-uno([X|R], H, [X|T]):- 
-	uno(R, H, T). 
-ordered([]). 
-ordered([_]). 
+ordenar(L, S):-
+	permutacion(L, S),
+	ordered(S).
+permutacion([], []).
+permutacion(L, [H|R]):-
+	uno(L, H, L1),
+	permutacion(L1, R).
+uno([H|T], H, T).
+uno([X|R], H, [X|T]):-
+	uno(R, H, T).
+ordered([]).
+ordered([_]).
 ordered([X,Y|T]):-
 	X=[_,ValX],
 	Y=[_,ValY],
 	ValX=<ValY,
-	ordered([Y|T]). 
-	
-	
+	ordered([Y|T]).
+
+
 %Unir Lista
 unir_lista([],L,L).
 unir_lista([H|T],L,[H|M]):-
 	unir_lista(T,L,M).
-	
+
 %Parte de lista
 parte_de(E,[E|_]).
 parte_de(E,[_|T]):-
@@ -480,8 +480,8 @@ deleteAllElementsWithSamePropertySingle(X,[X=>_|T],N):-
 deleteAllElementsWithSamePropertySingle(X,[H|T],[H|N]):-
 	deleteAllElementsWithSamePropertySingle(X,T,N).
 
-	
-%Single version 
+
+%Single version
 
 deleteAllElementsWithSameNegatedPropertySingle(_,[],[]).
 
@@ -505,7 +505,7 @@ deleteElement(X,[H|T],[H|N]):-
 	deleteElement(X,T,N),
 	X\=H.
 
-	
+
 %------------------------------------------------------CONSULTA RELACIONES--------------------------------------------------------
 
 
@@ -547,10 +547,10 @@ relations_only_in_the_object(Object,[class(_,_,_,_,O)|_],Relations):-
 
 relations_only_in_the_object(Object,[_|T],Relations):-
 	relations_only_in_the_object(Object,T,Relations).
-	
 
 
- 
+
+
 
 concat_ancestors_relations([],_,[]).
 
@@ -561,7 +561,7 @@ concat_ancestors_relations([Ancestor|T],KB,TFinal):-
 	append(NewRelations,NewT,TFinal).
 
 
-	
+
 expand_classes_to_objects([],[],_).
 
 expand_classes_to_objects([not(X=>Y)|T],[not(X=>Objects)|NewT],KB):-
@@ -579,11 +579,11 @@ expand_classes_to_objects([not(X=>Y)|T],[not(X=>[Y])|NewT],KB):-
 
 expand_classes_to_objects([X=>Y|T],[X=>[Y]|NewT],KB):-
 	expand_classes_to_objects(T,NewT,KB).
-	
-	
-	
-	
-	
+
+
+
+
+
 
 relations_only_in_the_class(_,[],[]).
 
@@ -592,8 +592,8 @@ relations_only_in_the_class(Class,[class(Class,_,_,Relations,_)|_],Relations).
 relations_only_in_the_class(Class,[_|T],Relations):-
 	relations_only_in_the_class(Class,T,Relations).
 
-	
-	
+
+
 % Return all the objects of a class
 
 objects_of_a_class(Class,KB,Objects):-
@@ -627,17 +627,17 @@ objects_only_in_the_class(Class,[class(Class,_,_,_,O)|_],Objects):-
 
 objects_only_in_the_class(Class,[_|T],Objects):-
 	objects_only_in_the_class(Class,T,Objects).
-	
+
 extract_objects_names([],[]).
 
 extract_objects_names([[id=>Name,_,_]|T],Objects):-
 	extract_objects_names(T,Rest),
 	append([Name],Rest,Objects).
-	
-	
-	
-	
-	
+
+
+
+
+
 % Return all the descendant classes of a class
 
 descendants_of_a_class(Class,KB,Descendants):-
@@ -653,7 +653,7 @@ all_descendants_of_a_class(Classes,KB,Descendants):-
 	sons_of_a_list_of_classes(Classes,KB,Sons),
 	all_descendants_of_a_class(Sons,KB,RestOfDescendants),
 	append(Classes,RestOfDescendants,Descendants).
-	
+
 	% Return the sons of a list of classes of a class
 
 sons_of_a_list_of_classes([],_,[]).
@@ -662,19 +662,19 @@ sons_of_a_list_of_classes([Son|T],KB,Grandsons):-
 	sons_of_a_class(Son,KB,Sons),
 	sons_of_a_list_of_classes(T,KB,Cousins),
 	append(Sons,Cousins,Grandsons).
-	
-	
-	
-	
+
+
+
+
 	sons_of_a_class(_,[],[]).
 
 sons_of_a_class(Class,[class(Son,Class,_,_,_)|T],Sons):-
-	sons_of_a_class(Class,T,Brothers),	
+	sons_of_a_class(Class,T,Brothers),
 	append([Son],Brothers,Sons).
 
 sons_of_a_class(Class,[_|T],Sons):-
-	sons_of_a_class(Class,T,Sons).	
-	
+	sons_of_a_class(Class,T,Sons).
+
 %------------------------------------------------------EXTENSIONES DE CLASES--------------------------------------------------------
 
 
@@ -682,15 +682,15 @@ sons_of_a_class(Class,[_|T],Sons):-
 
 class_extension(Class,KB,Objects):-
     nl,write('Clase:'),write(Class),nl,
-	objects_of_a_class(Class,KB,Objects).	
+	objects_of_a_class(Class,KB,Objects).
 
-	
-	
+
+
 %------------------------------------------------------EXTENSIONES DE PROPIEDADES-------------------------------------------------
 
 % Property extension
 
-property_extension(Property,KB,Result):-    
+property_extension(Property,KB,Result):-
     nl,write('Propiedad:'),write(Property),nl,
 	objects_of_a_class(top,KB,AllObjects),
 	filter_objects_with_property(KB,Property,AllObjects,Objects),
@@ -732,13 +732,13 @@ find_value(Attribute,[Attribute|_],yes).
 
 find_value(Attribute,[_|T],Value):-
 	find_value(Attribute,T,Value).
-	
-	
+
+
 %------------------------------------------------------EXTENSIONES DE RELACIONES-------------------------------------------------
 % Relation extension
 
 relation_extension(Relation,KB,FinalResult):-
-    nl,write('Relación:'),write(Relation),nl,
+    nl,write('Relaciï¿½n:'),write(Relation),nl,
 	objects_of_a_class(top,KB,AllObjects),
 	filter_objects_with_relation(KB,Relation,AllObjects,Objects),
 	eliminate_null_property(Objects,Result),
@@ -791,18 +791,18 @@ find_value_positive_relation(Attribute,[Attribute=>Value|_],Value).
 find_value_positive_relation(Attribute,[_|T],Value):-
 	find_value_positive_relation(Attribute,T,Value).
 
-	
-	
+
+
 
 %--------------------------------------------------------------------------------------------------
-% Modulos para Inserción 
+% Modulos para Inserciï¿½n
 %--------------------------------------------------------------------------------------------------
 
 
 
-%-----------------------------------------------------------------------------------------------------------------------------------	
+%-----------------------------------------------------------------------------------------------------------------------------------
 %------------------------------------------------------AGREGAR CLASES----------------------------------------------------------
-%-----------------------------------------------------------------------------------------------------------------------------------	
+%-----------------------------------------------------------------------------------------------------------------------------------
 %------------------------------------------------------AGREGAR PROPIEDADES DE CLASES--------------------------------------------------------
 %Add new class property
 
@@ -810,7 +810,7 @@ agregarPropiedad(Clase,Propiedad,Valor):-
 	getEnv(KB),
 	add_class_property(Clase,Propiedad,Valor,KB,NKB),
 	updEnv(NKB).
-	
+
 add_class_property(Class,NewProperty,Value,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,NewProps,Rels,Objects),OriginalKB,NewKB),
 	append_property(Props,NewProperty,Value,NewProps).
@@ -823,9 +823,9 @@ append_property(Props,NewProperty,no,NewProps):-
 
 append_property(Props,NewProperty,Value,NewProps):-
 	append(Props,[[NewProperty=>Value,0]],NewProps).
-	
 
-%-============AGREGAR PREFERENCIAS EN LAS PROPIEDADES DE CLASES	
+
+%-============AGREGAR PREFERENCIAS EN LAS PROPIEDADES DE CLASES
 
 %%Add new class property preference
 add_class_property_preference(Class,NewPreference,Weight,OriginalKB,NewKB) :-
@@ -836,10 +836,10 @@ append_preference(Props,NewPreference,Weight,NewProps):-
 	append(Props,[[NewPreference,Weight]],NewProps).
 
 
-	
-	
-	
-%------------------------------------------------------AGREGAR RELACIONES DE CLASES--------------------------------------------------------	
+
+
+
+%------------------------------------------------------AGREGAR RELACIONES DE CLASES--------------------------------------------------------
 
 
 %Add new class relation
@@ -856,18 +856,18 @@ append_relation(Rels,NewRelation,OtherClass,NewRels):-
 
 
 
-%-============AGREGAR PREFERENCIAS EN LAS RELACIONES DE CLASES	
- %Revisar por que se repite con la add_class_property_preference 
+%-============AGREGAR PREFERENCIAS EN LAS RELACIONES DE CLASES
+ %Revisar por que se repite con la add_class_property_preference
 %%Add new class relation preference
 add_class_relation_preference(Class,NewPreference,Weight,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,NewRels,Objects),OriginalKB,NewKB),
 	append_preference(Rels,NewPreference,Weight,NewRels).
 
-	
-	
-%-----------------------------------------------------------------------------------------------------------------------------------	
-%------------------------------------------------------AGREGAR OBJETOS--------------------------------------------------------	
-%-----------------------------------------------------------------------------------------------------------------------------------	
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------
+%------------------------------------------------------AGREGAR OBJETOS--------------------------------------------------------
+%-----------------------------------------------------------------------------------------------------------------------------------
 %Add new class
 crearClase(Nombre,Madre):-
 	getEnv(KB),
@@ -922,9 +922,9 @@ add_object_relation(Object,NewRelation,OtherObject,OriginalKB,NewKB) :-
 
 
 %--------------------------------------------------------------------------------------------------
-% Modulos para Eliminar 
+% Modulos para Eliminar
 %--------------------------------------------------------------------------------------------------
-	
+
 %Delete all elements with a specific property in a property-value list
 %deleteAllElementsWithSameProperty(P,InputList,OutputList).
 %Example (p2,[p1=>v1,p2=>v2,p3=>v3,p2=>v4,p4=>v4],[p1=>v1,p3=>v3,p4=>v4])
@@ -936,9 +936,9 @@ deleteAllElementsWithSameProperty(X,[[X=>_,_]|T],N):-
 
 deleteAllElementsWithSameProperty(X,[H|T],[H|N]):-
 	deleteAllElementsWithSameProperty(X,T,N).
-	
-	
-	
+
+
+
 %Delete all elements with a specific negated property in a property-value list
 %deleteAllElementsWithSameNegatedProperty(P,InputList,OutputList).
 %Example (p2,[p1=>v1,not(p2=>v2),not(p3=>v3),p2=>v4,p4=>v4],[p1=>v1,not(p3=>v3),p2=>v4,p4=>v4])
@@ -949,11 +949,11 @@ deleteAllElementsWithSameNegatedProperty(X,[[not(X=>_),_]|T],N):-
 	deleteAllElementsWithSameNegatedProperty(X,T,N).
 
 deleteAllElementsWithSameNegatedProperty(X,[H|T],[H|N]):-
-	deleteAllElementsWithSameNegatedProperty(X,T,N).	
-	
-%-----------------------------------------------------------------------------------------------------------------------------------	
-%------------------------------------------------------ELIMINAR CLASES----------------------------------------------------------	
-%-----------------------------------------------------------------------------------------------------------------------------------	
+	deleteAllElementsWithSameNegatedProperty(X,T,N).
+
+%-----------------------------------------------------------------------------------------------------------------------------------
+%------------------------------------------------------ELIMINAR CLASES----------------------------------------------------------
+%-----------------------------------------------------------------------------------------------------------------------------------
 
 % Remove a class
 
@@ -969,7 +969,7 @@ changeMother(OldMother,NewMother,[class(C,OldMother,P,R,O)|T],[class(C,NewMother
 
 changeMother(OldMother,NewMother,[H|T],[H|N]):-
 	changeMother(OldMother,NewMother,T,N).
-	
+
 
 
 %------------------------------------------------------ELIMINAR PROPIEDADES DE CLASES--------------------------------------------------------
@@ -981,17 +981,17 @@ rm_class_property(Class,Property,OriginalKB,NewKB) :-
 	deleteAllElementsWithSameProperty(Property,Props,Aux),
 	deleteElement([not(Property),_],Aux,Aux2),
 	deleteElement([Property,_],Aux2,NewProps).
- 
-%-============ELIMINAR PREFERENCIAS EN LAS PROPIEDADES DE CLASES	
+
+%-============ELIMINAR PREFERENCIAS EN LAS PROPIEDADES DE CLASES
 
 %Remove a class property preference
 
 rm_class_property_preference(Class,Preference,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,NewProps,Rels,Objects),OriginalKB,NewKB),
 	deleteElement([Preference,_],Props,NewProps).
-	
+
 %------------------------------------------------------ELIMINAR RELACIONES DE CLASES--------------------------------------------------------
-%Remove a class relation 
+%Remove a class relation
 
 rm_class_relation(Class,Relation,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,NewRels,Objects),OriginalKB,NewKB),
@@ -1002,17 +1002,17 @@ rm_class_relation_negative(Class,not(Relation),OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,NewRels,Objects),OriginalKB,NewKB),
 	deleteAllElementsWithSameNegatedProperty(Relation,Rels,NewRels).
 
-%-============ELIMINAR PREFERENCIAS EN LAS RELACIONES DE CLASES	
+%-============ELIMINAR PREFERENCIAS EN LAS RELACIONES DE CLASES
 
 %Remove a class relation preference
 rm_class_relation_preference(Class,Preference,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,NewRels,Objects),OriginalKB,NewKB),
 	deleteElement([Preference,_],Rels,NewRels).
-	
-	
-%-----------------------------------------------------------------------------------------------------------------------------------	
-%------------------------------------------------------ELIMINAR OBJETOS--------------------------------------------------------	
-%-----------------------------------------------------------------------------------------------------------------------------------	
+
+
+%-----------------------------------------------------------------------------------------------------------------------------------
+%------------------------------------------------------ELIMINAR OBJETOS--------------------------------------------------------
+%-----------------------------------------------------------------------------------------------------------------------------------
 
 %Remove an object
 
@@ -1021,7 +1021,7 @@ rm_object(Object,OriginalKB,NewKB) :-
 	isElement([id=>Object|Properties],Objects),
 	deleteElement([id=>Object|Properties],Objects,NewObjects),
 	delete_relations_with_object(Object,TemporalKB,NewKB).
-	
+
 delete_relations_with_object(_,[],[]).
 
 delete_relations_with_object(Object,[class(C,M,P,R,O)|T],[class(C,M,P,NewR,NewO)|NewT]):-
@@ -1045,8 +1045,8 @@ cancel_relation(Object,[[not(_=>Object),_]|T],NewT):-
 
 cancel_relation(Object,[H|T],[H|NewT]):-
 	cancel_relation(Object,T,NewT).
-	
-	
+
+
 
 %------------------------------------------------------ELIMINAR PROPIEDADES DE OBJETOS--------------------------------------------------------
 %Remove an object property
@@ -1058,9 +1058,9 @@ rm_object_property(Object,Property,OriginalKB,NewKB) :-
 	deleteAllElementsWithSameProperty(Property,Properties,Aux),
 	deleteElement([not(Property),_],Aux,Aux2),
 	deleteElement([Property,_],Aux2,NewProperties).
- 
- 
-%-============ELIMINAR PREFERENCIAS EN LAS PROPIEDADES DE OBJETOS	
+
+
+%-============ELIMINAR PREFERENCIAS EN LAS PROPIEDADES DE OBJETOS
 
 %Remove an object property preference
 rm_object_property_preference(Object,Preference,OriginalKB,NewKB) :-
@@ -1078,7 +1078,7 @@ rm_object_relation(Object,Relation,OriginalKB,NewKB) :-
 	changeElement([id=>Object,Properties,Relations],[id=>Object,Properties,NewRelations],Objects,NewObjects),
 	deleteAllElementsWithSameProperty(Relation,Relations,NewRelations).
 
-	
+
 %Revisar en que casos cae
 rm_object_relation_negative(Object,not(Relation),OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,Rels,NewObjects),OriginalKB,NewKB),
@@ -1086,8 +1086,8 @@ rm_object_relation_negative(Object,not(Relation),OriginalKB,NewKB) :-
 	changeElement([id=>Object,Properties,Relations],[id=>Object,Properties,NewRelations],Objects,NewObjects),
 	deleteAllElementsWithSameNegatedProperty(Relation,Relations,NewRelations).
 
-	
-%-============ELIMINAR PREFERENCIAS EN LAS RELACIONES DE OBJETOS	
+
+%-============ELIMINAR PREFERENCIAS EN LAS RELACIONES DE OBJETOS
 
 %Remove an object relation preference
 rm_object_relation_preference(Object,Preference,OriginalKB,NewKB) :-
@@ -1095,18 +1095,18 @@ rm_object_relation_preference(Object,Preference,OriginalKB,NewKB) :-
 	isElement([id=>Object,Properties,Relations],Objects),
 	changeElement([id=>Object,Properties,Relations],[id=>Object,Properties,NewRelations],Objects,NewObjects),
 	deleteElement([Preference,_],Relations,NewRelations).
-	
 
-	
+
+
 %--------------------------------------------------------------------------------------------------
-% Modulos para Modificar 
+% Modulos para Modificar
 %--------------------------------------------------------------------------------------------------
 
-%-----------------------------------------------------------------------------------------------------------------------------------	
-%------------------------------------------------------MODIFICAR CLASES--------------------------------------------------------	
-%-----------------------------------------------------------------------------------------------------------------------------------	
-	
- 
+%-----------------------------------------------------------------------------------------------------------------------------------
+%------------------------------------------------------MODIFICAR CLASES--------------------------------------------------------
+%-----------------------------------------------------------------------------------------------------------------------------------
+
+
 %Change the name of a class
 
 change_class_name(Class,NewName,KB,NewKB):-
@@ -1114,17 +1114,17 @@ change_class_name(Class,NewName,KB,NewKB):-
 	changeMother(Class,NewName,TemporalKB,TemporalKB2),
 	change_relations_with_object(Class,NewName,TemporalKB2,NewKB).
 
- 
-	
+
+
 %------------------------------------------------------MODIFICAR PROPIEDADES DE CLASES--------------------------------------------------------
-	
+
 change_value_class_property(Class,Property,NewValue,KB,NewKB):-
 	rm_class_property(Class,Property,KB,TemporalKB),
 	add_class_property(Class,Property,NewValue,TemporalKB,NewKB).
-	
 
 
-%-============MODIFICAR PREFERENCIAS EN LAS PROPIEDADES DE CLASES	
+
+%-============MODIFICAR PREFERENCIAS EN LAS PROPIEDADES DE CLASES
 
 change_weight_class_property_preference(Class,Preference,NewWeight,KB,NewKB):-
 	rm_class_property_preference(Class,Preference,KB,TemporalKB),
@@ -1138,26 +1138,26 @@ change_value_class_relation(Class,Relation,NewClassRelated,KB,NewKB):-
 	add_class_relation(Class,Relation,NewClassRelated,TemporalKB,NewKB).
 
 
-%-============MODIFICAR PREFERENCIAS EN LAS REALCIONES DE CLASES	
+%-============MODIFICAR PREFERENCIAS EN LAS REALCIONES DE CLASES
 
 
 change_weight_class_relation_preference(Class,Preference,NewWeight,KB,NewKB):-
 	rm_class_relation_preference(Class,Preference,KB,TemporalKB),
 	add_class_relation_preference(Class,Preference,NewWeight,TemporalKB,NewKB).
-	
-	
-%-----------------------------------------------------------------------------------------------------------------------------------	
-%------------------------------------------------------MODIFICAR OBJETOS--------------------------------------------------------	
-%-----------------------------------------------------------------------------------------------------------------------------------	
 
-%Change the name of an object	
+
+%-----------------------------------------------------------------------------------------------------------------------------------
+%------------------------------------------------------MODIFICAR OBJETOS--------------------------------------------------------
+%-----------------------------------------------------------------------------------------------------------------------------------
+
+%Change the name of an object
 
 change_object_name(Object,NewName,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,Rels,NewObjects),OriginalKB,TemporalKB),
 	isElement([id=>Object|Properties],Objects),
 	changeElement([id=>Object|Properties],[id=>NewName|Properties],Objects,NewObjects),
 	change_relations_with_object(Object,NewName,TemporalKB,NewKB).
-	
+
 change_relations_with_object(_,_,[],[]).
 
 change_relations_with_object(Object,NewName,[class(C,M,P,R,O)|T],[class(C,M,P,NewR,NewO)|NewT]):-
@@ -1169,8 +1169,8 @@ change_relations_with_object(Object,NewName,[class(C,M,P,R,O)|T],[class(C,M,P,Ne
 change_relations(Object,NewName,[[id=>N,P,R]|T],[[id=>N,P,NewR]|NewT]):-
 	change_relation(Object,NewName,R,NewR),
 	change_relations(Object,NewName,T,NewT).
-	
-	
+
+
 change_relation(_,_,[],[]).
 change_relation(OldName,NewName,[[R=>OldName,Weight]|T],[[R=>NewName,Weight]|NewT]):-
 	change_relation(OldName,NewName,T,NewT).
@@ -1181,16 +1181,16 @@ change_relation(OldName,NewName,[[not(R=>OldName),Weight]|T],[[not(R=>NewName),W
 change_relation(OldName,NewName,[H|T],[H|NewT]):-
 	change_relation(OldName,NewName,T,NewT).
 
-	
 
- 
+
+
 %------------------------------------------------------MODIFICAR PROPIEDADES DE OBJETOS--------------------------------------------------------
-	
+
 change_value_object_property(Object,Property,NewValue,KB,NewKB):-
 	rm_object_property(Object,Property,KB,TemporalKB),
 	add_object_property(Object,Property,NewValue,TemporalKB,NewKB).
 
-%-============MODIFICAR PREFERENCIAS EN LAS PROPIEDADES DE OBJETOS	
+%-============MODIFICAR PREFERENCIAS EN LAS PROPIEDADES DE OBJETOS
 
 change_weight_object_property_preference(Object,Preference,NewWeight,KB,NewKB):-
 	rm_object_property_preference(Object,Preference,KB,TemporalKB),
@@ -1199,14 +1199,14 @@ change_weight_object_property_preference(Object,Preference,NewWeight,KB,NewKB):-
 
 
 %------------------------------------------------------MODIFICAR RELACIONES DE OBJETOS--------------------------------------------------------
-	
+
 change_value_object_relation(Object,Relation,NewObjectRelated,KB,NewKB):-
 	rm_object_relation(Object,Relation,KB,TemporalKB),
 	add_object_relation(Object,Relation,NewObjectRelated,TemporalKB,NewKB).
-	
-%-============MODIFICAR PREFERENCIAS EN LAS RELACIONES DE OBJETOS	
-	
-	
+
+%-============MODIFICAR PREFERENCIAS EN LAS RELACIONES DE OBJETOS
+
+
 %%Preferences change weights
 
 change_weight_object_relation_preference(Object,Preference,NewWeight,KB,NewKB):-
@@ -1215,339 +1215,334 @@ change_weight_object_relation_preference(Object,Preference,NewWeight,KB,NewKB):-
 
 
 %------------------------------------------------------------------------
-% Ejecución de las Consulta todas las propiedades
+% Ejecuciï¿½n de las Consulta todas las propiedades
 %------------------------------------------------------------------------
- 
- %________________Consultas
-todas_clases:-
-		getEnv(KB),
-		classes_of_individual(piolin,KB,X),	
-		write(X),
-		updEnv(X).
 
-todas_propiedades:-
+ %________________Consultas
+todas_extension_clases(Clase):-
+ 		getEnv(KB),
+ 		class_extension(Clase,KB,X),
+ 		write(X).
+
+todas_extension_propiedades(Propiedad):-
+ 		getEnv(KB),
+ 		property_extension(Propiedad,KB,X),
+ 		write(X).
+
+todas_extension_relaciones(Relacion):-
+ 		getEnv(KB),
+ 		relation_extension(Relacion,KB,X),
+ 		write(X).
+
+todas_clases(Objeto):-
 		getEnv(KB),
-		properties_of_individual(piolin,KB,X),	
-		write(X),
-		updEnv(X).
-		
-todas_relaciones:-
+		classes_of_individual(Objeto,KB,X),
+		write(X).
+
+todas_propiedades(Objeto):-
 		getEnv(KB),
-		relations_of_individual(piolin,KB,X),	
-		write(X),
-		updEnv(X).
-		
-todas_extension_clases:-
+		properties_of_individual(Objeto,KB,X),
+		write(X).
+
+todas_relaciones(Objeto):-
 		getEnv(KB),
-		class_extension(animales,KB,X),	
-		write(X),
-		updEnv(X).		
-		
-todas_extension_propiedades:-
-		getEnv(KB),
-		property_extension(propiedad_vive,KB,X),	
-		write(X),
-		updEnv(X).
- 
- 
-todas_extension_relaciones:-
-		getEnv(KB),
-		relation_extension(relacion_humano,KB,X),	
-		write(X),
-		updEnv(X).
-		
+		relations_of_individual(piolin,KB,X),
+		write(X).
+
+
+
 %---------------------Insertar
 
 %Clases
 
 agregar_clases:-
-		getEnv(KB), 
-		add_class(extraterrestres,animales,KB,KB2),	
+		getEnv(KB),
+		add_class(extraterrestres,animales,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		class_extension(extraterrestres,KB2,X),
-		write(X). 
+		write(X).
 
 agregar_clases_propiedades:-
-		getEnv(KB), 
-		add_class_property(extraterrestres,propiedad_vivo_extraterrestre,si,KB,KB2),	
+		getEnv(KB),
+		add_class_property(extraterrestres,propiedad_vivo_extraterrestre,si,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		property_extension(propiedad_vivo_extraterrestre,KB2,X),
-		write(X). 
+		write(X).
 
 agregar_clases_propiedades_preferencias:-
 		getEnv(KB),
-		add_class_property_preference(extraterrestres,preferencia1,2,KB,KB2),	
+		add_class_property_preference(extraterrestres,preferencia1,2,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		class_extension(extraterrestres,KB2,X),
-		write(X). 		
- 
+		write(X).
+
 agregar_clases_relaciones:-
 		getEnv(KB),
-		add_class_relation(extraterrestres,relacion_mental,telequinesis,KB,KB2),	
+		add_class_relation(extraterrestres,relacion_mental,telequinesis,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		relation_extension(relacion_mental,KB2,X),
-		write(X).		
-		
+		write(X).
+
 
 agregar_clases_relaciones_preferencias:-
 		getEnv(KB),
-		add_class_relation_preference(extraterrestres,relacion_mental,1,KB,KB2),	
+		add_class_relation_preference(extraterrestres,relacion_mental,1,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		relation_extension(relacion_mental,KB2,X),
-		write(X).		
-				
-		
-		
+		write(X).
+
+
+
 %Objetos
 agregar_objetos:-
-		getEnv(KB), 
-		add_object(spock,extraterrestres,KB,KB2),	
+		getEnv(KB),
+		add_object(spock,extraterrestres,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		class_extension(extraterrestres,KB2,X),
-		write(X). 
+		write(X).
 
 agregar_objetos_propiedades:-
-		getEnv(KB), 
-		add_object_property(spock,propiedad_orejas,picudas,KB,KB2),	
+		getEnv(KB),
+		add_object_property(spock,propiedad_orejas,picudas,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		property_extension(propiedad_orejas,KB2,X),
-		write(X). 
+		write(X).
 
 agregar_objetos_propiedades_preferencias:-
-		getEnv(KB),  
-		add_object_property_preference(spock,propiedad_orejas_preferencia,1,KB,KB2),	
+		getEnv(KB),
+		add_object_property_preference(spock,propiedad_orejas_preferencia,1,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		class_extension(extraterrestres,KB2,X),
-		write(X). 		
- 
+		write(X).
+
 agregar_objetos_relaciones:-
-		getEnv(KB),  
-		add_object_relation(spock,relacion_paterna,sarek,KB,KB2),	
+		getEnv(KB),
+		add_object_relation(spock,relacion_paterna,sarek,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		relation_extension(relacion_paterna,KB2,X),
-		write(X).		
-		
+		write(X).
+
 
 agregar_objetos_relaciones_preferencias:-
-		getEnv(KB),  
-		add_object_relation_preference(spock,relacion_paterna_preferencia,1,KB,KB2),	
+		getEnv(KB),
+		add_object_relation_preference(spock,relacion_paterna_preferencia,1,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		relation_extension(relacion_paterna_preferencia,KB2,X),
-		write(X).		
-				
-		
-		 
+		write(X).
+
+
+
 %---------------------Modificar
 
 %Clases
 modificar_clases:-
-		getEnv(KB),  
-		change_class_name(extraterrestres,vulcanos,KB,KB2),	
+		getEnv(KB),
+		change_class_name(extraterrestres,vulcanos,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		class_extension(vulcanos,KB2,X),
-		write(X). 
-		
+		write(X).
+
 modificar_clases_propiedades:-
-		getEnv(KB),  
-		change_value_class_property(vulcanos,propiedad_vivo_extraterrestre,no,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(propiedad_vivo_extraterrestre,KB2,X),
-		write(X). 
-		
-		
-modificar_clases_propiedades2:-
-		getEnv(KB),  
-		change_value_class_property(vulcanos,propiedad_vivo_extraterrestre,si,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(propiedad_vivo_extraterrestre,KB2,X),
-		write(X). 
-		
-		
-modificar_clases_propiedades_preferencias:-
-		getEnv(KB),  
-		change_weight_class_property_preference(vulcanos,preferencia1,1,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(preferencia1,KB2,X),
-		write(X). 		
-		
-modificar_clases_relaciones:-
-		getEnv(KB),  
-		change_value_class_relation(vulcanos,relacion_mental,telepatia,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_mental,KB2,X),
-		write(X).   
-		
-modificar_clases_relaciones_preferencias:-
-		getEnv(KB),  
-		change_weight_class_relation_preference(vulcanos,relacion_mental,2,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_mental,KB2,X),
-		write(X).   
-		
-%Objetos
-
-modificar_objetos:-
-		getEnv(KB),  
-		change_object_name(spock,capitan_spok,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		class_extension(vulcanos,KB2,X),
-		write(X). 
-		
-modificar_objetos_propiedades:-
-		getEnv(KB),  
-		change_value_object_property(capitan_spok,propiedad_orejas,si,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(propiedad_orejas,KB2,X),
-		write(X). 
-		
-		
-modificar_objetos_propiedades2:-
-		getEnv(KB), 
-		change_value_object_property(capitan_spok,propiedad_orejas,raras,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(propiedad_orejas,KB2,X),
-		write(X). 
-		
-		
-modificar_objetos_propiedades_preferencias:-
-		getEnv(KB), 
-		change_weight_object_property_preference(capitan_spok,propiedad_orejas_preferencia,2,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(propiedad_orejas_preferencia,KB2,X),
-		write(X). 		
-		
-modificar_objetos_relaciones:-
-		getEnv(KB), 
-		change_value_object_relation(capitan_spok,relacion_paterna,sarek_spok,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_paterna,KB2,X),
-		write(X).   
-		
-modificar_objetos_relaciones_preferencias:-
-		getEnv(KB), 
-		change_weight_object_relation_preference(capitan_spok,relacion_paterna_preferencia,2,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_paterna_preferencia,KB2,X),
-		write(X).   
-		
-		
-		
-%---------------------Borrar
-
-		
-%Objetos
-
-		
-borrar_objetos_relaciones_preferencias:-
-		getEnv(KB), 
-		rm_object_relation_preference(capitan_spok,relacion_paterna_preferencia,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_paterna_preferencia,KB2,X),
-		write(X). 		 
-
- 
-borrar_objetos_relaciones :-
-		getEnv(KB), 
-		rm_object_relation(capitan_spok,relacion_paterna,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_paterna,KB2,X),
-		write(X). 		 
-		
-		
-borrar_objetos_propiedades_preferencias:-
-		getEnv(KB), 
-		rm_object_property_preference(capitan_spok,preferencia1,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(preferencia1,KB2,X),
-		write(X). 	
-
-
-borrar_objetos_propiedades:-
-		getEnv(KB), 
-		rm_object_property(capitan_spok,propiedad_orejas,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		property_extension(propiedad_orejas,KB2,X),
-		write(X). 		
-
-borrar_objetos:-
 		getEnv(KB),
-		rm_object(capitan_spok,KB,KB2),	
+		change_value_class_property(vulcanos,propiedad_vivo_extraterrestre,no,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		class_extension(capitan_spok,KB2,X),
-		write(X). 
-		
-	
-		
-%Clases
-
-		 
-		
-borrar_clases_relaciones_preferencias:-
-		getEnv(KB),
-		rm_class_relation_preference(vulcanos,relacion_mental,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_mental,KB2,X),
-		write(X). 
-
-borrar_clases_relaciones :-
-		getEnv(KB),
-		rm_class_relation(vulcanos,relacion_mental,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
-		relation_extension(relacion_mental,KB2,X),
-		write(X). 
-		
-		
-borrar_clases_propiedades_preferencias:-
-		getEnv(KB),
-		rm_class_property_preference(vulcanos,propiedad_vivo_extraterrestre,KB,KB2),	
-		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		property_extension(propiedad_vivo_extraterrestre,KB2,X),
 		write(X).
 
-		
+
+modificar_clases_propiedades2:-
+		getEnv(KB),
+		change_value_class_property(vulcanos,propiedad_vivo_extraterrestre,si,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(propiedad_vivo_extraterrestre,KB2,X),
+		write(X).
+
+
+modificar_clases_propiedades_preferencias:-
+		getEnv(KB),
+		change_weight_class_property_preference(vulcanos,preferencia1,1,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(preferencia1,KB2,X),
+		write(X).
+
+modificar_clases_relaciones:-
+		getEnv(KB),
+		change_value_class_relation(vulcanos,relacion_mental,telepatia,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_mental,KB2,X),
+		write(X).
+
+modificar_clases_relaciones_preferencias:-
+		getEnv(KB),
+		change_weight_class_relation_preference(vulcanos,relacion_mental,2,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_mental,KB2,X),
+		write(X).
+
+%Objetos
+
+modificar_objetos:-
+		getEnv(KB),
+		change_object_name(spock,capitan_spok,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		class_extension(vulcanos,KB2,X),
+		write(X).
+
+modificar_objetos_propiedades:-
+		getEnv(KB),
+		change_value_object_property(capitan_spok,propiedad_orejas,si,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(propiedad_orejas,KB2,X),
+		write(X).
+
+
+modificar_objetos_propiedades2:-
+		getEnv(KB),
+		change_value_object_property(capitan_spok,propiedad_orejas,raras,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(propiedad_orejas,KB2,X),
+		write(X).
+
+
+modificar_objetos_propiedades_preferencias:-
+		getEnv(KB),
+		change_weight_object_property_preference(capitan_spok,propiedad_orejas_preferencia,2,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(propiedad_orejas_preferencia,KB2,X),
+		write(X).
+
+modificar_objetos_relaciones:-
+		getEnv(KB),
+		change_value_object_relation(capitan_spok,relacion_paterna,sarek_spok,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_paterna,KB2,X),
+		write(X).
+
+modificar_objetos_relaciones_preferencias:-
+		getEnv(KB),
+		change_weight_object_relation_preference(capitan_spok,relacion_paterna_preferencia,2,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_paterna_preferencia,KB2,X),
+		write(X).
+
+
+
+%---------------------Borrar
+
+
+%Objetos
+
+
+borrar_objetos_relaciones_preferencias:-
+		getEnv(KB),
+		rm_object_relation_preference(capitan_spok,relacion_paterna_preferencia,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_paterna_preferencia,KB2,X),
+		write(X).
+
+
+borrar_objetos_relaciones :-
+		getEnv(KB),
+		rm_object_relation(capitan_spok,relacion_paterna,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_paterna,KB2,X),
+		write(X).
+
+
+borrar_objetos_propiedades_preferencias:-
+		getEnv(KB),
+		rm_object_property_preference(capitan_spok,preferencia1,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(preferencia1,KB2,X),
+		write(X).
+
+
+borrar_objetos_propiedades:-
+		getEnv(KB),
+		rm_object_property(capitan_spok,propiedad_orejas,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(propiedad_orejas,KB2,X),
+		write(X).
+
+borrar_objetos:-
+		getEnv(KB),
+		rm_object(capitan_spok,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		class_extension(capitan_spok,KB2,X),
+		write(X).
+
+
+
+%Clases
+
+
+
+borrar_clases_relaciones_preferencias:-
+		getEnv(KB),
+		rm_class_relation_preference(vulcanos,relacion_mental,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_mental,KB2,X),
+		write(X).
+
+borrar_clases_relaciones :-
+		getEnv(KB),
+		rm_class_relation(vulcanos,relacion_mental,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		relation_extension(relacion_mental,KB2,X),
+		write(X).
+
+
+borrar_clases_propiedades_preferencias:-
+		getEnv(KB),
+		rm_class_property_preference(vulcanos,propiedad_vivo_extraterrestre,KB,KB2),
+		updEnv(KB2),
+		write('Predicado exitoso.'),nl,
+		property_extension(propiedad_vivo_extraterrestre,KB2,X),
+		write(X).
+
+
 borrar_clases_propiedades:-
 		getEnv(KB),
-		rm_class_property(vulcanos,propiedad_vivo_extraterrestre,KB,KB2),	
+		rm_class_property(vulcanos,propiedad_vivo_extraterrestre,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		property_extension(propiedad_vivo_extraterrestre,KB2,X),
-		write(X). 
-		
-		
+		write(X).
+
+
 borrar_clases:-
 		getEnv(KB),
-		rm_class(vulcanos,KB,KB2),	
+		rm_class(vulcanos,KB,KB2),
 		updEnv(KB2),
-		write('Ejecución con éxito.'),nl,
+		write('Predicado exitoso.'),nl,
 		class_extension(vulcanos,KB2,X),
-		write(X). 
+		write(X).
