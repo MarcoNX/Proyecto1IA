@@ -8,7 +8,7 @@
 % Ing. Rodrigo Terp�n Arenas
 
 % Profesor: Dr. Arturo
-% Ayudante: Iv�n
+% Ayudante: Mtro.Iv�n
 
 
 
