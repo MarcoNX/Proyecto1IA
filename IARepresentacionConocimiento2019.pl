@@ -1246,7 +1246,7 @@ todas_propiedades(Objeto):-
 
 todas_relaciones(Objeto):-
 		getEnv(KB),
-		relations_of_individual(piolin,KB,X),
+		relations_of_individual(Objeto,KB,X),
 		write(X).
 
 
