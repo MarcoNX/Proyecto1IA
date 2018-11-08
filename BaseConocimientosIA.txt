@@ -6,117 +6,121 @@
 	),
 	class(animales,top,
 		[
-			[propiedad_estado=>vivos,0],
-			[propiedad_comen=>todo,0]
+			[vivos,0],
+			[ponen_huevos,0],
+			[color=>desconocido,0],
+			[[tamano=>grande,carnivoro]=>>peligroso,2]
+			[[vivo,odia]=>>amargado,5]
 		],
 		[],
 		[
 			[id=>lagartija,
 				[],
-				[[propiedad_come=>insectos,0]]
+				[[come=>insectos,0]]
 			]
 		]
 	),
 	class(peces,animales,
 		[
-			[propiedad_accion=>nadan,0],
-			[propiedad_vive=>agua,0],
-			[propiedad_nace=>huevo,0]
+			[nadan,0],
+			[acuatico,0]
 		],
 		[],
 		[
 			[id=>dory,
 				[
-					[propiedad_nace=>pendeja,0]
+					[memoria_corto-plazo,0]
 				],
 				[
-					[not(relacion_amigo=>tux),0],
-					[relacion_amigo=>nemo,0]
+					[not(amigo=>tux),0],
+					[amigo=>nemo,0]
 				]
 			],
 			[id=>nemo,
 				[
-					[propiedad_vive=>anemona,0]
+					[vive=>anemona,0]
 				],
 				[
-					[relacion_amigo=>dory,0]
+					[amigo=>dory,0]
 				]
 			]
 		]
 	),
 	class(aves,animales,
 		[
-			[propiedad_vuela,0],
-			[propiedad_nace=>huevo,0]
+			[vuela,0],
+			[nace=>huevo,0],
+			[carnivoro,0]
 		],
 		[],
 		[
 			[id=>piolin,
 				[
-					[propiedad_color=>amarillo,0],
-					[propiedad_carisma=>risueno,0],
-					[propiedad_tamano=>pequeno,0],
-					[propiedad_tierno,0]
+					[color=>amarillo,0],
+					[carisma=>risueno,0],
+					[tamano=>pequeno,0],
+					[tierno,0]
 				],
 				[
-					[relacion_mascota=>hominidos,0]
+					[mascota=>hominidos,0]
 				]
 			]
 		]
 	),
 	class(pinguinos,aves,
 		[
-			[not(propiedad_vuelan),0]
+			[not(vuelan),0]
 		],
 		[
-			[relacion_come=>peces,0]
+			[come=>peces,0]
 		],
 		[
 			[id=>pete,
 				[
-					[propiedad_tamano=>pequeno,0]
+					[tamano=>pequeno,0]
 				],
 				[
-					[not(relacion_amigo=>arthur),0]
+					[not(amigo=>arthur),0]
 				]
 			],
 			[id=>tux,
 				[
-					[propiedad_trabaja=>computadoras,0]
+					[trabaja=>computadoras,0]
 				],
 				[
-					[relacion_amigo=>arthur,0]
+					[amigo=>arthur,0]
 				]
 			]
 		]
 	),
 	class(aguilas,aves,
 		[
-			[propiedad_vive=>montana,0]
+			[vive=>montana,0]
 		],
 		[],
 		[
 			[id=>arthur,
 				[
-					[propiedad_tamano=>grande,0]
+					[tamano=>grande,0]
 				],
 				[
-					[not(relacion_amigo=>pete),0],
-					[not(relacion_amigo=>tux),0]
+					[not(amigo=>pete),0],
+					[not(amigo=>tux),0]
 				]
 			]
 		]
 	),
 	class(mamiferos,animales,
 		[
-			[propiedad_nacen=>mama,0],
-			[propiedad_comen=>leche,0]
+			[nace=>mama,0],
+			[comen=>leche,0],
+			[not(ponen_huevos),0]
 		],
 		[],
 		[
 			[id=>rafiqui,
 				[
-					[propiedad_color=>negro,0]
+					[color=>negro,0]
 				],
 				[]
 			]
@@ -124,45 +128,46 @@
 	),
 	class(ornitorrincos,mamiferos,
 		[
-			[propiedad_nacen=>huevo,0]
+			[nace=>huevo,0]
+			[ponen_huevos,0]
 		],
 		[],
 		[
 			[id=>perry,
 				[
-					[propiedad_trabaja=>agente,0]
+					[trabaja=>agente,0]
 				],
 				[
-					[relacion_enemigo=>doofenshmirtz,0],
-					[relacion_dueno=>phineas,0]
+					[enemigo=>doofenshmirtz,0],
+					[dueno=>phineas,0]
 				]
 			]
 		]
 	),
 	class(hominidos,mamiferos,
 			[
-				[propiedad_piensa=>yes,0],
-				[propiedad_seenamora=>yes,0]
+				[piensa=>yes,0],
+				[seenamora=>yes,0]
 			],
 			[
-				[relacion_depredadorDe=>animales,0]
+				[depredadorDe=>animales,0]
 			],
 			[
 				[id=>phineas,
 					[
-						[propiedad_vive=>arealimitrofe,0]
+						[vive=>arealimitrofe,0]
 					],
 					[
-						[relacion_mascota=>perry,0]
+						[mascota=>perry,0]
 					]
 				],
 				[id=>doofenshmirtz,
 					[
-						[propiedad_vive=>arealimitrofe,0],
-						[propiedad_trabaja=>maldad,0]
+						[vive=>arealimitrofe,0],
+						[trabaja=>maldad,0]
 					],
 					[
-						[relacion_enemigo=>perry,0]
+						[enemigo=>perry,0]
 					]
 				]
 			]
@@ -174,19 +179,17 @@
 	),
 	class(protozoos,animales,
 		[
-			[propiedad_reproducir=>multicelulares,0]
+			[reproducir=>multicelulares,0]
 		],
 		[],
 		[
 			[id=>plakton,
 				[
-					[propiedad_odiar=>yes,0]
+					[odia,0]
 				],
-				[
-					[relacion_enemigo=>bobEsponja]
-				]
+				[]
 			]
 		]
 	),
-	class(invertebrados,animales,[],[],[])
+	class(insectos,animales,[],[],[])
 ]
