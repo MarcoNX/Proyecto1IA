@@ -9,8 +9,8 @@
 			[vivos,0],
 			[ponen_huevos,0],
 			[color=>desconocido,0],
-			[[tamano=>grande,carnivoro]=>>peligroso,2]
-			[[vivo,odia]=>>amargado,5]
+			[[tamano=>grande,carnivoro]=>>[peligroso,2]]
+			[[vivo,odia]=>>[amargado,5]]
 		],
 		[],
 		[

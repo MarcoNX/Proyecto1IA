@@ -22,77 +22,56 @@
 % Lectura y Guardado de Archivos
 %------------------------------------------------------------------------
 
-%---------- Variable de entorno ---------------------
+%%--------------------------------------------------
+% Load and Save from files
+%--------------------------------------------------
+%KB open and save
 
-setEnv:- %Inicializa variables de entorno
-	setenv('ProyectoIA','C:/Users/rodri/Documentos/GitHub/Proyecto1IA/BaseConocimientosIA.txt').%Constante de ubicaci�n del KB en el disco duro
+%KB open and save
 
-updEnv(KB):- %Actualiza KB en memoria y guarda en disco duro
-	save_kb(KB).
+%KB open and save
 
-getEnv(KB):- %Trae KB de la memoria
-	open_kb(KB).
 
-% ------------- Abrir y cerrar Archivo KB-----------------------------
+
+open_original_kb(KB):-
+open('C:\\KB\\KB.txt',read,Stream),
+readclauses(Stream,X),
+close(Stream),
+atom_to_term_conversion(X,KB).
 
 open_kb(KB):-
-	getenv('ProyectoIA',KBPATH),
-	open(KBPATH,read,Stream),
-	readclauses(Stream,X),
-	close(Stream),
-	atom_to_term(X,KB).
+open('C:\\KB\\KB.txt',read,Stream),
+readclauses(Stream,X),
+close(Stream),
+atom_to_term_conversion(X,KB).
 
 save_kb(KB):-
-	getenv('ProyectoIA',KBPATH),
-	open(KBPATH,write,Stream),
-	writeq(Stream,KB),
-	close(Stream).
+open('C:\\KB\\KB.txt',write,Stream),
+writeq(Stream,KB),
+close(Stream).
 
 readclauses(InStream,W) :-
         get0(InStream,Char),
         checkCharAndReadRest(Char,Chars,InStream),
-	atom_chars(W,Chars).
-/*
+				atom_chars(W,Chars).
+
 checkCharAndReadRest(-1,[],_) :- !.  % End of Stream
 checkCharAndReadRest(end_of_file,[],_) :- !.
+
 checkCharAndReadRest(Char,[Char|Chars],InStream) :-
         get0(InStream,NextChar),
         checkCharAndReadRest(NextChar,Chars,InStream).
 
-%compile an atom string of characters as a prolog term
-atom_to_term(ATOM, TERM) :-
-	atom(ATOM),
-	atom_to_chars(ATOM,STR),
-	atom_to_chars('.',PTO),
-	append(STR,PTO,STR_PTO),
-	read_from_chars(STR_PTO,TERM).
-
 atom_to_term_conversion(ATOM, TERM) :-
-	 atom(ATOM),
-	 atom_to_chars(ATOM,STR),
-	 atom_to_chars('.',PTO),
-	 append(STR,PTO,STR_PTO),
-	 read_from_chars(STR_PTO,TERM).
+         					atom(ATOM),
+         					atom_to_chars(ATOM,STR),
+         					atom_to_chars('.',PTO),
+         					append(STR,PTO,STR_PTO),
+         					read_from_chars(STR_PTO,TERM).
 
-*/
-% ===>Lee el caracter y conserva el resto de la cadena
-	checkCharAndReadRest(-1,[],_) :- !.
-	checkCharAndReadRest(end_of_file,[],_) :- !. %Final de la cadena
-	checkCharAndReadRest(Char,[Char|Chars],InStream) :-
-				get0(InStream,NextChar),
-				checkCharAndReadRest(NextChar,Chars,InStream).
-
-%===> Compilar una cadena de caracteres de un �tomo como un t�rmino Prolog
-	atom_to_term(ATOM, TERM) :-
-		atom(ATOM),
-		atom_to_chars(ATOM,STR),
-		atom_to_chars('.',PTO),
-		append(STR,PTO,STR_PTO),
-		read_from_chars(STR_PTO,TERM).
 
 :- op(800,xfx,'=>').
-:- op(15,xfx,'=>>').
-
+:- op(850,xfx,'=>>').
 
 
 
