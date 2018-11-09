@@ -1228,10 +1228,6 @@ change_value_object_property(Object,Property,NewValue,KB,NewKB):-
 	add_object_property(Object,Property,NewValue,TemporalKB,NewKB).
 
 %-============MODIFICAR PREFERENCIAS EN LAS PROPIEDADES DE OBJETOS
-
-%!	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%!	verificar
-%!	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 cambiarPesoDePreferenciaDePropiedadDeObjeto(Objeto,Preferencia,Peso):-
 	getEnv(KB),
 	change_weight_object_property_preference(Objeto,Preferencia,Peso,KB,NKB),
