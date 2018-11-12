@@ -961,7 +961,7 @@ Para eliminar una clase se tienen que seguir los siguientes pasos:
 2.- Si es una clase, los objetos de esta clase se pasan a la clase madre. (listo)
 3.- Se elimina el objeto o la clase. (listo)
 4.- Si es una clase, a las clases derivadas de la clase a borrar se les cambia la clase madre para evitar errores. (listo)
-5.- Eliminar las propiedades y relaciones de la KB referentes a la claso u objeto. (pendiente, necesita revisión)
+5.- Eliminar las propiedades y relaciones de la KB referentes a la claso u objeto. (listo)
 6.- En caso de que no exista la clase o el objeto, se escribe 'don't know' (listo)
 */
 
@@ -1113,10 +1113,10 @@ borra_relaciones_clase(Objeto,[H|T],[H|NueT]):-
 
 rm_object_property(Objeto,Propiedad,OriginalKB,NewKB) :-
   class_of_an_object(Objeto,OriginalKB,Clase),
-  changeElement(class(Clase,Madre,Props,Rels,Objetos),class(Clase,Madre,Props,Rels,NueObjetos),OriginalKB,NewKB),
-  isElement([id=>Objeto,PropObj,Rels],Objetos),
-  changeElement([id=>Objeto,PropObj,Rels],[id=>Objeto,NewProps,Rels],Objetos,NueObjetos),
-  properties_only_in_the_object(Objeto,Objetos,PropObj),
+  write(Clase),
+  changeElement(class(Clase,Madre,Props,Rels,ObjetosCla),class(Clase,Madre,Props,Rels,NueObjetos),OriginalKB,NewKB),
+  isElement([id=>Objeto,PropObj,RelsObj],ObjetosCla),
+  changeElement([id=>Objeto,PropObj,RelsObj],[id=>Objeto,NewProps,RelsObj],ObjetosCla,NueObjetos),
   borraPropRelflecha(Propiedad,PropObj,Aux),
   borraPropRel(Propiedad,Aux,Aux2),
   borraNotPropRelflecha(Propiedad,Aux2,Aux3),
