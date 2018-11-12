@@ -63,7 +63,7 @@
 	),
 	class(pinguinos,aves,
 		[
-			[not(vuelan),0]
+			[not(vuela),0]
 		],
 		[
 			[come=>peces,0]

@@ -1075,7 +1075,8 @@ Para poder hacer esto hay que considerar los siguientes pasos:
     a objetos o clases externas).
 */
 
-rm_object(Clase,Objeto,OriginalKB,NewKB) :-
+rm_object(Objeto,OriginalKB,NewKB) :-
+  class_of_an_object(Objeto,OriginalKB,Clase),
   aislar_objetos(Clase,OriginalKB,ObjClase),
 	isElement([id=>Objeto|Properties],ObjClase),
 	deleteElement([id=>Objeto|Properties],ObjClase,NueObjClase),
@@ -1136,6 +1137,18 @@ rm_object_property_preference(Object,Preference,OriginalKB,NewKB) :-
 
 %------------------------------------------------------ELIMINAR RELACIONES DE OBJETOS--------------------------------------------------------
 
+
+rm_object_relation(Objeto,Relacion,OriginalKB,NewKB) :-
+  class_of_an_object(Objeto,OriginalKB,Clase),
+  write(Clase),
+  changeElement(class(Clase,Madre,Props,Rels,ObjetosCla),class(Clase,Madre,Props,Rels,NueObjetos),OriginalKB,NewKB),
+  isElement([id=>Objeto,PropObj,RelsObj],ObjetosCla),
+  changeElement([id=>Objeto,PropObj,RelsObj],[id=>Objeto,PropObj,NewRels],ObjetosCla,NueObjetos),
+  borraPropRelflecha(Relacion,RelsObj,Aux),
+  borraPropRel(Relacion,Aux,Aux2),
+  borraNotPropRelflecha(Relacion,Aux2,Aux3),
+  borraNotPropRel(Relacion,Aux3,NewRels).
+/*
 %Remove an object relation
 rm_object_relation(Object,Relation,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,Rels,NewObjects),OriginalKB,NewKB),
@@ -1150,7 +1163,7 @@ rm_object_relation_negative(Object,not(Relation),OriginalKB,NewKB) :-
 	isElement([id=>Object,Properties,Relations],Objects),
 	changeElement([id=>Object,Properties,Relations],[id=>Object,Properties,NewRelations],Objects,NewObjects),
 	deleteAllElementsWithSameNegatedProperty(Relation,Relations,NewRelations).
-
+*/
 
 %-============ELIMINAR PESOS EN LAS RELACIONES DE OBJETOS
 
