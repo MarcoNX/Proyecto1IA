@@ -10,15 +10,9 @@
 			[ponen_huevos,0],
 			[color=>desconocido,0],
 			[[tamano=>grande,carnivoro]=>>[peligroso,2]]
-			[[vivo,odia]=>>[amargado,5]]
 		],
 		[],
-		[
-			[id=>lagartija,
-				[],
-				[[come=>insectos,0]]
-			]
-		]
+		[]
 	),
 	class(peces,animales,
 		[
@@ -128,7 +122,7 @@
 	),
 	class(ornitorrincos,mamiferos,
 		[
-			[nace=>huevo,0]
+			[nace=>huevo,0],
 			[ponen_huevos,0]
 		],
 		[],
@@ -171,20 +165,5 @@
 					]
 				]
 			]
-	),
-	class(protozoos,animales,
-		[
-			[reproducir=>multicelulares,0]
-		],
-		[],
-		[
-			[id=>plakton,
-				[
-					[odia,0]
-				],
-				[]
-			]
-		]
-	),
-	class(insectos,animales,[],[],[])
+	)
 ]
