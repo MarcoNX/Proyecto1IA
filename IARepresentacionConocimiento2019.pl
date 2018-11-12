@@ -5,15 +5,15 @@
 % Ing. Juan Daniel Lawrence Pedroza
 % Ing. Marco Tulio Sanchez Rodriguez
 % Ing. Nahet Cortez Fuerte
-% Ing. Rodrigo Terp�n Arenas
+% Ing. Rodrigo Terpán Arenas
 
 % Profesor: Dr. Arturo
 % Ayudante: Mtro.Ivan
 
 
 
-%Proposito General: Procesar informaci�n jer�rquica de Individuos, clases y Propiedades a partir de una Base de datos.
-%Se desarrollar� de forma modular, de acuerdo a los criterios impuestos en el requerimiento del proyecto.
+%Proposito General: Procesar información jerárquica de Individuos, clases y Propiedades a partir de una Base de datos.
+%Se desarrollará de forma modular, de acuerdo a los criterios impuestos en el requerimiento del proyecto.
 %Estructura de Conocimiento
 %nombre,padre, propiedades,relaciones,Objetos
 
@@ -25,7 +25,7 @@
 %---------- Variable de entorno ---------------------
 
 setEnv:- %Inicializa variables de entorno
-	setenv('ProyectoIA','E:/Home User/Documents/Prolog/BaseConocimientosIA.txt').%Constante de ubicaci�n del KB en el disco duro
+	setenv('ProyectoIA','E:/Home User/Documents/Prolog/BaseConocimientosIA.txt').%Constante de ubicación del KB en el disco duro
 
 updEnv(KB):- %Actualiza KB en memoria y guarda en disco duro
 	save_kb(KB).
@@ -60,7 +60,7 @@ readclauses(InStream,W) :-
 				get0(InStream,NextChar),
 				checkCharAndReadRest(NextChar,Chars,InStream).
 
-%===> Compilar una cadena de caracteres de un �tomo como un t�rmino Prolog
+%===> Compilar una cadena de caracteres de un átomo como un término Prolog
 	atom_to_term(ATOM, TERM) :-
 		atom(ATOM),
 		atom_to_chars(ATOM,STR),
@@ -81,7 +81,7 @@ readclauses(InStream,W) :-
 
 
 
-%------------------------------------------------------FUNCIONES B�SICAS--------------------------------------------------------
+%------------------------------------------------------FUNCIONES BÁSICAS--------------------------------------------------------
 
  %Verify if an element X is in a list
 %isElement(X,List)
