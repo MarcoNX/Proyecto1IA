@@ -34,19 +34,19 @@
 
 
 open_original_kb(KB):-
-open('C:\\Users\\rodri\\Documents\\GitHub\\Proyecto1IA\\KB.txt',read,Stream),
+open('C:\\Users\\rodri\\Documents\\GitHub\\Proyecto1IA\\KBn.txt',read,Stream),
 readclauses(Stream,X),
 close(Stream),
 atom_to_term_conversion(X,KB).
 
 open_kb(KB):-
-open('C:\\Users\\rodri\\Documents\\GitHub\\Proyecto1IA\\KB.txt',read,Stream),
+open('C:\\Users\\rodri\\Documents\\GitHub\\Proyecto1IA\\KBn.txt',read,Stream),
 readclauses(Stream,X),
 close(Stream),
 atom_to_term_conversion(X,KB).
 
 save_kb(KB):-
-open('C:\\Users\\rodri\\Documents\\GitHub\\Proyecto1IA\\KB.txt',write,Stream),
+open('C:\\Users\\rodri\\Documents\\GitHub\\Proyecto1IA\\KBn.txt',write,Stream),
 writeq(Stream,KB),
 close(Stream).
 
@@ -938,10 +938,10 @@ borraPropRel(X,[H|T],[H|N]):-
   borraNotPropRelflecha(_,[],[]).
 
   borraNotPropRelflecha(X,[[not(X=>_),_]|T],N):-
-  	borraNotPropRel(X,T,N).
+  	borraNotPropRelflecha(X,T,N).
 
   borraNotPropRelflecha(X,[H|T],[H|N]):-
-  	borraNotPropRel(X,T,N).
+  	borraNotPropRelflecha(X,T,N).
 %Y una operación que borre propiedades y relaciones negadas con forma [p,peso] sin operador flecha.
 borraNotPropRel(_,[],[]).
 
@@ -1021,15 +1021,58 @@ rm_class_property(Class,Property,OriginalKB,NewKB) :-
 	deleteElement([not(Property),_],Aux,Aux2),
 	deleteElement([Property,_],Aux2,NewProps).
 */
+%=============Predicados para borrar preferencias:
 
-%-============ELIMINAR PESOS EN LAS PROPIEDADES DE CLASES  (NOTA: Cambiar por remoción de inferencias de propiedades)
+borraPrefflecha(_,[],[]).
 
-%Quita el peso de una propiedad.
+borraPrefflecha(X,[[_=>>X=>_,_]|T],N):-
+	borraPrefflecha(X,T,N).
 
+borraPrefflecha(X,[H|T],[H|N]):-
+	borraPrefflecha(X,T,N).
+% La propiedades y relaciones también pueden ser de la forma [prop,peso], sin tener operador =>.  En este caso, es necesaria otra función que borre esto.
+
+borraPref(_,[],[]).
+
+borraPref(X,[[_=>>X,_]|T],N):-
+  borraPref(X,T,N).
+
+borraPref(X,[H|T],[H|N]):-
+  borraPref(X,T,N).
+
+  %También necesitamos que se borren propiedades y relaciones negadas.
+  %borraNotPropRel(P,InputList,OutputList).
+  %Ejemplo (p2,[[p1=>v1,w1],[not(p2=>v2),w2],[not(p3=>v3),w3],[p2=>v4,w4],[p4=>v4,w5]],[[p1=>v1,w1],[p3=>v3,w3],[p2=>v4,w4],[p4=>v4,w5]])
+
+  borraNotPrefflecha(_,[],[]).
+
+  borraNotPrefflecha(X,[[_=>>not(X=>_),_]|T],N):-
+  	borraNotPrefflecha(X,T,N).
+
+  borraNotPrefflecha(X,[H|T],[H|N]):-
+  	borraNotPrefflecha(X,T,N).
+%Y una operación que borre propiedades y relaciones negadas con forma [p,peso] sin operador flecha.
+borraNotPref(_,[],[]).
+
+borraNotPref(X,[[_=>>not(X),_]|T],N):-
+	borraNotPref(X,T,N).
+
+borraNotPref(X,[H|T],[H|N]):-
+	borraNotPref(X,T,N).
+
+%-============Elimina preferencias en propiedades
+rm_class_property_preference(Class,Property,OriginalKB,NewKB) :-
+  properties_only_in_the_class(Class,OriginalKB,Props),
+  borraPrefflecha(Property,Props,Aux),
+  borraPref(Property,Aux,Aux2),
+  borraNotPrefflecha(Property,Aux2,Aux3),
+  borraNotPref(Property,Aux3,NewProps),
+  changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,NewProps,Rels,Objects),OriginalKB,NewKB).
+/*
 rm_class_property_preference(Class,Preference,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,NewProps,Rels,Objects),OriginalKB,NewKB),
 	deleteElement([Preference,_],Props,NewProps).
-
+*/
 %------------------------------------------------------ELIMINAR RELACIONES DE CLASES--------------------------------------------------------
 %Quita una relación de una clase
 
@@ -1055,11 +1098,20 @@ rm_class_relation_negative(Class,not(Relation),OriginalKB,NewKB) :-
 
 %-============ELIMINAR PESOS EN LAS RELACIONES DE CLASES (NOTA: Cambiar por remoción de inferencias de relaciones)
 
-%Remove a class relation preference  (NOTA: Cambiar por remoción de inferencias de relaciones)
+%Quita preferencias en las relaciones de clase.
+
+rm_class_relation_preference(Class,Relacion,OriginalKB,NewKB) :-
+  relations_only_in_the_class(Class,OriginalKB,Relaciones),
+  borraPrefflecha(Relacion,Props,Aux),
+  borraPref(Relacion,Aux,Aux2),
+  borraNotPrefflecha(Relacion,Aux2,Aux3),
+  borraNotPref(Relacion,Aux3,NewRels),
+  changeElement(class(Class,Mother,Props,Relaciones,Objects),class(Class,Mother,Props,NewRels,Objects),OriginalKB,NewKB).
+	/*
 rm_class_relation_preference(Class,Preference,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,NewRels,Objects),OriginalKB,NewKB),
 	deleteElement([Preference,_],Rels,NewRels).
-
+*/
 
 %-----------------------------------------------------------------------------------------------------------------------------------
 %------------------------------------------------------ELIMINAR OBJETOS--------------------------------------------------------
@@ -1126,14 +1178,25 @@ rm_object_property(Objeto,Propiedad,OriginalKB,NewKB) :-
 
 
 
-%---------------------------------------------ELIMINAR PESOS EN LAS PROPIEDADES DE OBJETOS--------------------------------------------
+%---------------------------------------------Eliminar preferencias en las propiedades de objetos-------------------------------------------
 
-%Remove an object property preference
+rm_object_property_preference(Objeto,Propiedad,OriginalKB,NewKB) :-
+  class_of_an_object(Objeto,OriginalKB,Clase),
+  write(Clase),
+  changeElement(class(Clase,Madre,Props,Rels,ObjetosCla),class(Clase,Madre,Props,Rels,NueObjetos),OriginalKB,NewKB),
+  isElement([id=>Objeto,PropObj,RelsObj],ObjetosCla),
+  changeElement([id=>Objeto,PropObj,RelsObj],[id=>Objeto,NewProps,RelsObj],ObjetosCla,NueObjetos),
+	borraPrefflecha(Propiedad,PropObj,Aux),
+  borraPref(Propiedad,Aux,Aux2),
+  borraNotPrefflecha(Propiedad,Aux2,Aux3),
+  borraNotPref(Propiedad,Aux3,NewProps).
+	/*
 rm_object_property_preference(Object,Preference,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,Rels,NewObjects),OriginalKB,NewKB),
 	isElement([id=>Object,Properties,Relations],Objects),
 	changeElement([id=>Object,Properties,Relations],[id=>Object,NewProperties,Relations],Objects,NewObjects),
 	deleteElement([Preference,_],Properties,NewProperties).
+	*/
 
 %------------------------------------------------------ELIMINAR RELACIONES DE OBJETOS--------------------------------------------------------
 
@@ -1165,15 +1228,25 @@ rm_object_relation_negative(Object,not(Relation),OriginalKB,NewKB) :-
 	deleteAllElementsWithSameNegatedProperty(Relation,Relations,NewRelations).
 */
 
-%-============ELIMINAR PESOS EN LAS RELACIONES DE OBJETOS
+%-============Eliminar preferencias en las relaciones de objetos.
 
-%Remove an object relation preference
+rm_object_relation_preference(Objeto,Relacion,OriginalKB,NewKB) :-
+  class_of_an_object(Objeto,OriginalKB,Clase),
+  write(Clase),
+  changeElement(class(Clase,Madre,Props,Rels,ObjetosCla),class(Clase,Madre,Props,Rels,NueObjetos),OriginalKB,NewKB),
+  isElement([id=>Objeto,PropObj,RelsObj],ObjetosCla),
+  changeElement([id=>Objeto,PropObj,RelsObj],[id=>Objeto,PropObj,NewRels],ObjetosCla,NueObjetos),
+	borraPrefflecha(Relacion,RelsObj,Aux),
+  borraPref(Relacion,Aux,Aux2),
+  borraNotPrefflecha(Relacion,Aux2,Aux3),
+  borraNotPref(Relacion,Aux3,NewProps).
+/*
 rm_object_relation_preference(Object,Preference,OriginalKB,NewKB) :-
 	changeElement(class(Class,Mother,Props,Rels,Objects),class(Class,Mother,Props,Rels,NewObjects),OriginalKB,NewKB),
 	isElement([id=>Object,Properties,Relations],Objects),
 	changeElement([id=>Object,Properties,Relations],[id=>Object,Properties,NewRelations],Objects,NewObjects),
 	deleteElement([Preference,_],Relations,NewRelations).
-
+*/
 
 
 %--------------------------------------------------------------------------------------------------
