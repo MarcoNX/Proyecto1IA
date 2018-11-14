@@ -1,0 +1,60 @@
+%----------------------------------------
+% Lista management
+%----------------------------------------
+%Change all ocurrences of an element X in a list for the value Y
+%remplazarAtomo(X,Y,ListaAnterior,ListaNueva).
+%Example (p,b,[p,a,p,a,y,a],[p,b,p,b,y,b])
+remplazarAtomo(_,_,[],[]).
+remplazarAtomo(X,Y,[X|T],[Y|N]):-
+	remplazarAtomo(X,Y,T,N).
+remplazarAtomo(X,Y,[H|T],[H|N]):-
+	remplazarAtomo(X,Y,T,N).
+%Delete all ocurrences of an element X in a list
+%eliminarAtomo(X,ListaAnterior,ListaNueva).
+%Example (a,[p,a,p,a,y,a],[p,p,y])
+eliminarAtomo(_,[],[]).
+eliminarAtomo(X,[X|T],N):-
+	eliminarAtomo(X,T,N).
+eliminarAtomo(X,[H|T],[H|N]):-
+	eliminarAtomo(X,T,N),
+	X\=H.
+%Verify if an element X is in a list
+%verificarPertenenciaALista(X,Lista)
+%Example (n,[b,a,n,a,n,a])
+verificarPertenenciaALista(X,[X|_]).
+verificarPertenenciaALista(X,[_|T]):-
+	verificarPertenenciaALista(X,T).
+%Convert in a single list a list of lists
+%Example ([[a],[b,c],[],[d]],[a,b,c,d]).
+unificarListas([],[]).
+unificarListas([H|T],X):-
+	append(H,ListasResultantes,X),
+	unificarListas(T,ListasResultantes).
+%Delete all elements with a specific property in a property-value list
+%eliminarAtomosPorPropiedad(P,ListaAnterior,ListaNueva).
+%Example (p2,[p1=>v1,p2=>v2,p3=>v3,p2=>v4,p4=>v4],[p1=>v1,p3=>v3,p4=>v4])
+eliminarAtomosPorPropiedad(_,[],[]).
+eliminarAtomosPorPropiedad(X,[[X=>_,_]|T],N):-
+	eliminarAtomosPorPropiedad(X,T,N).
+eliminarAtomosPorPropiedad(X,[H|T],[H|N]):-
+	eliminarAtomosPorPropiedad(X,T,N).
+%%Single without weights
+eliminarAtomosPorPropiedadUnitaria(_,[],[]).
+eliminarAtomosPorPropiedadUnitaria(X,[X=>_|T],N):-
+	eliminarAtomosPorPropiedadUnitaria(X,T,N).
+eliminarAtomosPorPropiedadUnitaria(X,[H|T],[H|N]):-
+	eliminarAtomosPorPropiedadUnitaria(X,T,N).
+%Delete all elements with a specific negated property in a property-value list
+%eliminarAtomosPorPropiedadNegada(P,ListaAnterior,ListaNueva).
+%Example (p2,[p1=>v1,not(p2=>v2),not(p3=>v3),p2=>v4,p4=>v4],[p1=>v1,not(p3=>v3),p2=>v4,p4=>v4])
+eliminarAtomosPorPropiedadNegada(_,[],[]).
+eliminarAtomosPorPropiedadNegada(X,[[not(X=>_),_]|T],N):-
+	eliminarAtomosPorPropiedadNegada(X,T,N).
+eliminarAtomosPorPropiedadNegada(X,[H|T],[H|N]):-
+	eliminarAtomosPorPropiedadNegada(X,T,N).
+%Single version
+eliminarAtomosPorPropiedadNegadaUnitaria(_,[],[]).
+eliminarAtomosPorPropiedadNegadaUnitaria(X,[not(X=>_)|T],N):-
+	eliminarAtomosPorPropiedadNegadaUnitaria(X,T,N).
+eliminarAtomosPorPropiedadNegadaUnitaria(X,[H|T],[H|N]):-
+	eliminarAtomosPorPropiedadNegadaUnitaria(X,T,N).
