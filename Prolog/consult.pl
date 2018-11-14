@@ -494,3 +494,9 @@ objects_of_all_descendants_classes([Class|T],KB,AllObjects):-
 	objects_only_in_the_class(Class,KB,Objects),
 	objects_of_all_descendants_classes(T,KB,Rest),
 	append(Objects,Rest,AllObjects).
+
+checa_objeto_unknown(X):-
+	X=unknown,
+	write('No lo se').
+checa_objeto_unknown(X):-
+	write(X).

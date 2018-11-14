@@ -58,3 +58,9 @@ deleteAllElementsWithSameNegatedPropertySingle(X,[not(X=>_)|T],N):-
 	deleteAllElementsWithSameNegatedPropertySingle(X,T,N).
 deleteAllElementsWithSameNegatedPropertySingle(X,[H|T],[H|N]):-
 	deleteAllElementsWithSameNegatedPropertySingle(X,T,N).
+
+checa_lista_vacia(X):-
+	X=[],
+	write('No lo se').
+checa_lista_vacia(X):-
+	write(X).

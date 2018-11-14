@@ -21,7 +21,7 @@
 %--------------------------------------------------
 
 setEnv:- %Inicializa variables de entorno
-	setenv('ProyectoIA','C:/KB/BaseConocimientosIA.txt').%Constante de ubicación del KB en el disco duro
+	setenv('ProyectoIA','C:/Prolog/KB/BaseConocimientosIA.txt').%Constante de ubicación del KB en el disco duro
 
 updEnv(KB):- %Actualiza KB en memoria y guarda en disco duro
 	save_kb(KB).
@@ -65,3 +65,45 @@ checkCharAndReadRest(Char,[Char|Chars],InStream) :-
 
 :- op(800,xfx,'=>').
 :- op(850,xfx,'=>>').
+
+%------------------------------
+%Consultas
+%-----------------------------
+
+%Extension de una propiedad
+
+consulta_extension_propiedad(Propiedad):-
+	getEnv(KB),
+	property_extension(Propiedad,KB,X),
+	checa_lista_vacia(X).
+
+%Extension de una clase
+consulta_extension_clase(Clase):-
+	getEnv(KB),
+	class_extension(Clase,KB,X),
+	checa_objeto_unknown(X).
+
+%Extension de una relacion
+consulta_extension_relaciones(Relacion):-
+		getEnv(KB),
+		relation_extension(Relacion,KB,X),
+		checa_lista_vacia(X).
+%Todas las clases de un objeto
+todas_clases(Objeto):-
+		getEnv(KB),
+		classes_of_individual(Objeto,KB,X),
+		checa_objeto_unknown(X).
+
+%Todas las propiedades de un objeto
+todas_propiedades(Objeto):-
+		getEnv(KB),
+		properties_of_individual(Objeto,KB,X),
+		checa_objeto_unknown(X).
+
+
+%Todas las relaciones de un objeto
+todas_relaciones(Objeto):-
+		getEnv(KB),
+		relations_of_individual(Objeto,KB,X),
+		checa_objeto_unknown(X).
+
