@@ -335,11 +335,11 @@ inserta_clases_relaciones(Clase,NuevaRelacion,ClaseRelacionada):-
 		write('No lo se')
 		).
 
-inserta_clases_relaciones_preferencias(Clase,PropiedadPreferencia,Peso):-
+inserta_clases_relaciones_preferencias(Clase,RelacionPreferencia,Peso):-
 	getEnv(KB),
 	(
 		there_is_class(Clase,KB,yes),
-		add_class_relation_preference(Clase,PropiedadPreferencia,Peso,KB,KB2),
+		add_class_relation_preference(Clase,RelacionPreferencia,Peso,KB,KB2),
 		updEnv(KB2);
 		there_is_class(Clase,KB,unknown),
 		write('No lo se')
