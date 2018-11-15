@@ -432,17 +432,17 @@ inserta_objetos_relaciones(Objeto,NuevaRelacion,ObjetoRelacionado):-
                 write('No lo se')
            ).
 
-inserta_objetos_relaciones_preferencias(Objeto,PropiedadPreferencia,Peso):-
+inserta_objetos_relaciones_preferencias(Objeto,RelacionPreferencia,Peso):-
 	(
                 verifica_apodo(Objeto,yes),
                 relacion_apodo(Objeto,Nombre),
 		getEnv(KB),
 		(
 		    there_is_object(Nombre,KB,yes),
-		    add_object_relation_preference(Nombre,PropiedadPreferencia,Peso,KB,KB2),
+		    add_object_relation_preference(Nombre,RelacionPreferencia,Peso,KB,KB2),
 		    updEnv(KB2);
 		    there_is_object(Nombre,KB,no),
-		    add_object_relation_preference(Nombre,PropiedadPreferencia,Peso,KB,KB2),
+		    add_object_relation_preference(Nombre,RelacionPreferencia,Peso,KB,KB2),
 		    updEnv(KB2);
 		    there_is_object(Nombre,KB,unknown),
 		    write('No lo se')
