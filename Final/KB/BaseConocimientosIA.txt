@@ -1,0 +1,24 @@
+[
+class(top,none,[],[],[[id=>anonimo,[],[]]]),
+class(animales,top,[[propiedad_estado=>vivo,0],[propiedad_come=>todo,0]],[],[
+	[id=>hola,[[[propiedad_trabaja=>esclavo,propiedad_piensa]=>>not(propiedad_tiene_sentimientos=>buenos),6],[propiedad_nuevo=>hola,0]],[[[not(relacion_amigo=>pete)]=>>relacion_amigo=>tux,30]]]]),
+class(peces,animales,[[propiedad_accion=>nadan,0],[propiedad_vive=>agua,0],[propiedad_nace=>huevo,0]],[],[
+	[id=>dory,[[propiedad_nace=>pendeja,0]],[[not(relacion_amigo=>tux),0]]],
+	[id=>nemo,[[propiedad_vive=>anemona,0]],[[relacion_amigo=>dory,0]]]]),
+class(aves,animales,[[propiedad_vuela,0],[propiedad_nace=>huevo,0],[propiedad_tamano=>mediano,0]],[[[not(relacion_amigo=>pete)]=>>relacion_amigo=>tux,2]],[
+	[id=>piolin,[[propiedad_color=>amarillo,0],[propiedad_carisma=>risueno,0],[propiedad_tierno=>yes,0]],[[relacion_mascota=>hominidos,0]]]]),
+class(pinguinos,aves,[[not(propiedad_vuela),0]],[[relacion_come=>peces,0]],[
+	[id=>pete,[],[[not(relacion_amigo=>arthur),0]]],
+	[id=>tux,[],[[relacion_amigo=>pete,0]]]]),
+class(aguilas,aves,[[propiedad_vive=>montana,0]],[],[
+	[id=>arthur,[[propiedad_tamano=>grande,0]],[[not(relacion_amigo=>pete),0]]]]),
+class(mamiferos,animales,[[propiedad_nace=>mama,0],[propiedad_come=>leche,0]],[],[
+	[id=>rafiqui,[[propiedad_color=>negro,0]],[]]]),
+class(ornitorrincos,mamiferos,[[propiedad_nace=>huevo,0]],[],[
+	[id=>perry,[[propiedad_trabaja=>agente,0]],[[relacion_enemigo=>doofenshmirtz,0],[relacion_dueno=>phineas,0]]]]),
+class(hominidos,mamiferos,[[propiedad_piensa,0],[[propiedad_trabaja=>esclavo,propiedad_piensa]=>>not(propiedad_tiene_sentimientos=>buenos),1]],[[relacion_depredadorDe=>animales,0]],[
+	[id=>phineas,[[propiedad_vive=>arealimitrofe,0]],[[relacion_mascota=>perry,0],[[relacion_mascota=>perry]=>>relacion_enemigo=>doofenshmirtz,2]]],
+	[id=>doofenshmirtz,[[propiedad_vive=>arealimitrofe,0],[propiedad_trabaja=>maldad,0]],[[relacion_enemigo=>perry,0]]]]),
+class(human,hominidos,[[propiedad_color=>caca,0]],[],[
+	[id=>user,[[propiedad_trabaja=>esclavo,0],[[not(propiedad_tiene_sentimientos=>buenos)]=>>propiedad_es_infeliz,2]],[]]]),
+class(reptilianos,animales,[],[],[])]
