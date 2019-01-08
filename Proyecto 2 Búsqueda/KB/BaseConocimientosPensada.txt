@@ -1,0 +1,20 @@
+[
+class(top,none,[],[],[]),
+class(escenario,top,[],[],[]),
+class(objetos,escenario,[],[],[
+	[id=>cerveza,[[prop_pos_ideal=>bebidas,0],[prop_agarre=>100,0],[prop_pos_real=>bebidas,0],[prop_pos_observada=>bebidas,0]],[]],
+	[id=>coca,[[prop_pos_ideal=>bebidas,0],[prop_agarre=>100,0],[prop_pos_real=>bebidas,0],[prop_pos_observada=>bebidas,0]],[]],
+	[id=>sopa,[[prop_pos_ideal=>comida,0],[prop_agarre=>100,0],[prop_pos_real=>pan,0],[prop_pos_observada=>comida,0]],[]],
+	[id=>cereal,[[prop_pos_ideal=>comida,0],[prop_agarre=>100,0],[prop_pos_real=>bebidas,0],[prop_pos_observada=>comida,0]],[]],
+	[id=>galletas,[[prop_pos_ideal=>pan,0],[prop_agarre=>100,0],[prop_pos_real=>bebidas,0],[prop_pos_observada=>pan,0]],[]]]),
+class(lugares,escenario,[],[],[
+	[id=>inicial,[[prop_dis_pan=>10,0],[prop_dis_bebidas=>10,0],[prop_dis_comida=>10,0]],[]],
+	[id=>pan,[[prop_dis_inicial=>10,0],[prop_dis_bebidas=>10,0],[prop_dis_comida=>10,0],[prop_observada=>noobservada,0]],[]],
+	[id=>bebidas,[[prop_dis_inicial=>10,0],[prop_dis_pan=>10,0],[prop_dis_comida=>10,0],[prop_observada=>observada,0]],[]],
+	[id=>comida,[[prop_dis_inicial=>10,0],[prop_dis_pan=>10,0],[prop_dis_bebidas=>10,0],[prop_observada=>noobservada,0]],[]]]),
+class(personajes,escenario,[],[],[
+	[id=>robot,[[prop_pos=>bebidas,0],[prop_mano_d=>anonimo,0],[prop_mano_i=>anonimo,0]],[]]]),
+class(acciones,escenario,[],[],[
+	[id=>pendientes,[[entregar(coca),0]],[]],
+	[id=>accionesAtomicas,[],[]],
+	[id=>controlErrores,[[huboError=>noerror,0]],[]]])]

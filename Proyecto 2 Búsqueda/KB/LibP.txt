@@ -1,0 +1,1 @@
+[[cerveza],[coca],[sopa],[cereal],[galletas],[inicial],[pan],[bebidas],[comida],[robot],[pendientes],[accionesAtomicas],[controlErrores]]

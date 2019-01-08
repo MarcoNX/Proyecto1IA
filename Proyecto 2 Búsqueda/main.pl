@@ -1,0 +1,415 @@
+% Inteligencia Artificial Semestre 1 2019-1
+
+% Ing. Jessica Sarahi Mendez Rincon
+% Ing. Juan Daniel Lawrence Pedroza
+% Ing. Marco Tulio Sanchez Rodriguez
+% Ing. Nahet Cortez Fuerte
+% Ing. Rodrigo Terpán Arenas
+
+% Profesores: Dr. Luis A. Pineda Cortes
+%             Mtro.Ivan Torres Rodriguez
+%             Dr. Arturo Rodriguez Garcia
+
+%Proposito General: Procesar información jerárquica de Individuos, clases y Propiedades a partir de una Base de datos.
+%Se desarrollará de forma modular, de acuerdo a los criterios impuestos en el requerimiento del proyecto.
+%Estructura de Conocimiento
+%nombre,padre, propiedades,relaciones,Objetos
+
+%Analizis del robot del robot
+
+mostrarDondePiensoQueEstaTodo:-
+	getEnv(KB),
+	class_extension(lugares,KB,X),
+	consultaEstantes(X,KB).
+
+consultaEstantes([],_).
+consultaEstantes([inicial|T],KB):-
+	consultaEstantes(T,KB).
+consultaEstantes([H|T],KB):-
+	write('\nLos objetos del estante '),write(H),write(' son: \n'),
+	property_extension(prop_pos_observada=>H,KB,X),
+        leeObjetosdePropiedades(X),
+	consultaEstantes(T,KB).
+
+leeObjetosdePropiedades([]).
+leeObjetosdePropiedades([H:yes|T]):-
+	write(H), write(' '),
+	leeObjetosdePropiedades(T).
+
+actualizarPendientes:-
+	getEnv(KB),
+	class_extension(objetos,KB,X),
+	consultaObjetos(X).
+
+consultaObjetos([]).
+consultaObjetos([H|T]):-
+	getEnv(KB),
+	properties_of_individual(H,KB,X),
+	existePropiedad(prop_pos_observada=>Lugar1,X,yes),
+	existePropiedad(prop_pos_ideal=>Lugar2,X,yes),
+	(
+	    Lugar2=inicial,
+	    consultaObjetos(T);
+	    Lugar1=Lugar2,
+	    consultaObjetos(T);
+	    properties_of_individual(pendientes,KB,Y),
+	    atom_concat('reacomodar(',H,Cadena1),
+	    atom_concat(Cadena1,')',Temp),
+	    term_to_atom(Pendiente,Temp),
+	    existePropiedad(Pendiente,Y,Res),
+	    (
+		Res=yes,
+		consultaObjetos(T);
+		add_object_property(pendientes,Pendiente,yes,KB,KB2),
+		updEnv(KB2),
+		consultaObjetos(T)
+	    )
+	).
+
+
+
+
+
+
+%Acciones en simulacion----------------------------
+accionBuscar(Objeto,Res):-
+	localizarRobot(Estante),
+	accionBuscarP0(Estante),
+	accionBuscarP1(Estante),
+	accionBuscarP2(Estante),
+	accionBuscarP3(Estante,Objeto,Res),
+	actualizarPendientes.
+
+accionBuscarP0(Estante):-
+	getEnv(KB),
+	change_value_object_property(Estante,prop_observada,observada,KB,KB2),
+	updEnv(KB2).
+
+accionBuscarP1(Estante):-
+	getEnv(KB),
+	property_extension(prop_pos_observada=>Estante,KB,X),
+	property_extension(prop_pos_real=>Estante,KB,Y),
+	cambiaPosDesco(X,Y).
+accionBuscarP2(Estante):-
+	getEnv(KB),
+	property_extension(prop_pos_real=>Estante,KB,X),
+	cambiaObjetosPosObs(X,Estante).
+accionBuscarP3(Estante,Objeto,Res):-
+	getEnv(KB),
+	properties_of_individual(Objeto,KB,Y),
+	existePropiedad(prop_pos_observada=>Estante,Y,Res).
+
+cambiaObjetosPosObs([],_).
+cambiaObjetosPosObs([H:yes|T],Estante):-
+	getEnv(KB),
+	change_value_object_property(H,prop_pos_observada,Estante,KB,KB2),
+	updEnv(KB2),
+	cambiaObjetosPosObs(T,Estante).
+
+cambiaPosDesco([],_).
+cambiaPosDesco([H:yes|T],Y):-
+	(existeObjeto(H,Y,yes),
+	 cambiaPosDesco(T,Y);
+	existeObjeto(H,Y,no),
+	 getEnv(KB),
+	change_value_object_property(H,prop_pos_observada,anonimo,KB,KB2),
+	updEnv(KB2),
+	 cambiaPosDesco(T,Y)
+	).
+
+existeObjeto(_,[],no).
+existeObjeto(H,[H:yes|_],yes).
+existeObjeto(H,[_|T],Res):-
+	existeObjeto(H,T,Res).
+
+
+existePropiedad(_,[],no).
+existePropiedad(H,[H|_],yes).
+existePropiedad(H,[_|T],Res):-
+	existePropiedad(H,T,Res).
+
+localizarRobot(Lugar):-
+	getEnv(KB),
+	properties_of_individual(robot,KB,Y),
+	existePropiedad(prop_pos=>Lugar,Y,yes).
+
+accionMover(Lugar):-
+	getEnv(KB),
+	change_value_object_property(robot,prop_pos,Lugar,KB,KB2),
+	updEnv(KB2).
+/*
+accionAgarrar(Objeto,Res):-
+	localizarRobot(Lugar),
+	(
+	    Lugar=inicial,
+	    Res=no;
+	    comparaPosicion(Objeto,Res2),
+	    (
+			Res2=no,
+			Res2=Res;
+			objetoMano(d,ObjetoMd),
+			(
+				ObjetoMd=anonimo,
+				getEnv(KB),
+				properties_of_individual(Objeto,KB,Y),
+				existePropiedad(prop_agarre=>Porcentaje,Y,yes),
+				random(1,100,Rand),
+				probabilidad(Rand,Porcentaje,Res3),
+				(
+					Res3=no,
+					Res=Res3;
+					change_value_object_property(robot,prop_mano_d,Objeto,KB,KB2),
+					change_value_object_property(Objeto,prop_pos_real,manoD,KB2,KB3),
+					change_value_object_property(Objeto,prop_pos_observada,manoD,KB3,KB4),
+					updEnv(KB4),
+					Res=yes
+				);
+				objetoMano(i,ObjetoMi),
+				(
+					ObjetoMi=anonimo,
+					getEnv(KB),
+					properties_of_individual(Objeto,KB,Z),
+					existePropiedad(prop_agarre=>Porcentaje,Z,yes),
+					random(1,100,Rand),
+					probabilidad(Rand,Porcentaje,Res4),
+					(
+						Res4=no,
+						Res=Res4;
+						change_value_object_property(robot,prop_mano_i,Objeto,KB,KB2),
+						change_value_object_property(Objeto,prop_pos_real,manoI,KB2,KB3),
+						change_value_object_property(Objeto,prop_pos_observada,manoI,KB3,KB4),
+						updEnv(KB4),
+						Res=yes
+					);
+					Res=no
+				)
+			)
+	    )
+	).
+*/
+
+
+accionAgarrarD(Objeto,Res):-
+	getEnv(KB),
+	properties_of_individual(Objeto,KB,Y),
+	existePropiedad(prop_agarre=>Porcentaje,Y,yes),
+	random(1,100,Rand),
+	probabilidad(Rand,Porcentaje,Res3),
+	(
+		Res3=no,
+		Res=Res3;
+		change_value_object_property(robot,prop_mano_d,Objeto,KB,KB2),
+		change_value_object_property(Objeto,prop_pos_real,manoD,KB2,KB3),
+		change_value_object_property(Objeto,prop_pos_observada,manoD,KB3,KB4),
+		updEnv(KB4),
+		Res=yes
+	).
+
+accionAgarrarI(Objeto,Res):-
+	getEnv(KB),
+	properties_of_individual(Objeto,KB,Y),
+	existePropiedad(prop_agarre=>Porcentaje,Y,yes),
+	random(1,100,Rand),
+	probabilidad(Rand,Porcentaje,Res3),
+	(
+		Res3=no,
+		Res=Res3;
+		change_value_object_property(robot,prop_mano_i,Objeto,KB,KB2),
+		change_value_object_property(Objeto,prop_pos_real,manoI,KB2,KB3),
+		change_value_object_property(Objeto,prop_pos_observada,manoI,KB3,KB4),
+		updEnv(KB4),
+		Res=yes
+	).
+
+probabilidad(Rand,Prob,Res):-
+	(
+	   Rand<Prob,
+	   Res=yes;
+	   Res=no
+	).
+
+comparaPosicion(Objeto,Res):-
+	localizarRobot(Lugar),
+	getEnv(KB),
+	properties_of_individual(Objeto,KB,Y),
+	existePropiedad(prop_pos_real=>Lugar,Y,Res).
+
+objetoMano(Mano,Objeto):-
+	getEnv(KB),
+	properties_of_individual(robot,KB,Y),
+	atom_concat('prop_mano_',Mano,Propiedad),
+	existePropiedad(Propiedad=>Objeto,Y,yes).
+
+/*
+accionDejar(Objeto,Res):-
+	localizarRobot(Lugar),
+	objetoMano(d,ObjetoMd),
+	(
+	    ObjetoMd=Objeto,
+	    getEnv(KB),
+	    change_value_object_property(robot,prop_mano_d,anonimo,KB,KB2),
+	    change_value_object_property(Objeto,prop_pos_real,Lugar,KB2,KB3),
+	    change_value_object_property(Objeto,prop_pos_observada,Lugar,KB3,KB4),
+	    updEnv(KB4),
+	    Res=yes;
+	    objetoMano(i,ObjetoMi),
+	    (
+		ObjetoMi=Objeto,
+		getEnv(KB),
+		change_value_object_property(robot,prop_mano_i,anonimo,KB,KB2),
+		change_value_object_property(Objeto,prop_pos_real,Lugar,KB2,KB3),
+		change_value_object_property(Objeto,prop_pos_observada,Lugar,KB3,KB4),
+		updEnv(KB4),
+		Res=yes;
+		Res=no
+	    )
+	).
+*/
+accionDejarD:-
+	localizarRobot(Lugar),
+	getEnv(KB),
+	properties_of_individual(robot,KB,Y),
+	existePropiedad(prop_mano_d=>Objeto,Y,yes),
+	change_value_object_property(robot,prop_mano_d,anonimo,KB,KB2),
+	change_value_object_property(Objeto,prop_pos_real,Lugar,KB2,KB3),
+	change_value_object_property(Objeto,prop_pos_observada,Lugar,KB3,KB4),
+	updEnv(KB4).
+
+accionDejarI:-
+	localizarRobot(Lugar),
+	getEnv(KB),
+	properties_of_individual(robot,KB,Y),
+	existePropiedad(prop_mano_i=>Objeto,Y,yes),
+	change_value_object_property(robot,prop_mano_i,anonimo,KB,KB2),
+	change_value_object_property(Objeto,prop_pos_real,Lugar,KB2,KB3),
+	change_value_object_property(Objeto,prop_pos_observada,Lugar,KB3,KB4),
+	updEnv(KB4).
+
+
+
+%Acciones en analizis---------------------------------------------------
+
+localizarRobotA(Lugar):-
+	open_base_pensada(KBP),
+	properties_of_individual(robot,KBP,Y),
+	existePropiedad(prop_pos=>Lugar,Y,yes).
+
+analizisBuscar(Objeto):-
+	localizarRobotA(Estante),
+	open_base_pensada(KBP),
+	change_value_object_property(Estante,prop_observada,observada,KBP,KBP2),%tentativa A Quitar
+	save_base_pensada(KBP2),
+	atom_concat('accionBuscar(',Objeto,Cadena1),
+	atom_concat(Cadena1,',Res)',Accion),
+	inserta_objetos_propiedades(accionesAtomicas,Accion,yes).
+
+
+analizisMover(Lugar):-
+	open_base_pensada(KBP),
+	change_value_object_property(robot,prop_pos,Lugar,KBP,KBP2),
+	save_base_pensada(KBP2),
+	atom_concat('accionMover(',Lugar,Cadena1),
+	atom_concat(Cadena1,')',Accion),
+	inserta_objetos_propiedades(accionesAtomicas,Accion,yes).
+
+
+analizisAgarrarD(Objeto):-
+	open_base_pensada(KBP),
+	change_value_object_property(robot,prop_mano_d,Objeto,KBP,KBP2),
+	change_value_object_property(Objeto,prop_pos_real,manoD,KBP2,KBP3),
+	change_value_object_property(Objeto,prop_pos_observada,manoD,KBP3,KBP4),
+	save_base_pensada(KBP4),
+	atom_concat('accionAgarrarD(',Objeto,Cadena1),
+	atom_concat(Cadena1,',Res)',Accion),
+	inserta_objetos_propiedades(accionesAtomicas,Accion,yes).
+
+analizisAgarrarI(Objeto):-
+	open_base_pensada(KBP),
+	change_value_object_property(robot,prop_mano_i,Objeto,KBP,KBP2),
+	change_value_object_property(Objeto,prop_pos_real,manoI,KBP2,KBP3),
+	change_value_object_property(Objeto,prop_pos_observada,manoI,KBP3,KBP4),
+	save_base_pensada(KBP4),
+	atom_concat('accionAgarrarI(',Objeto,Cadena1),
+	atom_concat(Cadena1,',Res)',Accion),
+	inserta_objetos_propiedades(accionesAtomicas,Accion,yes).
+
+analizisDejarD:-
+	localizarRobotA(Lugar),
+	open_base_pensada(KBP),
+	properties_of_individual(robot,KBP,Y),
+	existePropiedad(prop_mano_d=>Objeto,Y,yes),
+	change_value_object_property(robot,prop_mano_d,anonimo,KBP,KBP2),
+	change_value_object_property(Objeto,prop_pos_real,Lugar,KBP2,KBP3),
+	change_value_object_property(Objeto,prop_pos_observada,Lugar,KBP3,KBP4),
+	save_base_pensada(KBP4),
+	atom_concat('accionDejarD(',Objeto,Cadena1),
+	atom_concat(Cadena1,')',Accion),
+	inserta_objetos_propiedades(accionesAtomicas,Accion,yes).
+
+analizisDejarI:-
+	localizarRobotA(Lugar),
+	open_base_pensada(KBP),
+	properties_of_individual(robot,KBP,Y),
+	existePropiedad(prop_mano_i=>Objeto,Y,yes),
+	change_value_object_property(robot,prop_mano_i,anonimo,KBP,KBP2),
+	change_value_object_property(Objeto,prop_pos_real,Lugar,KBP2,KBP3),
+	change_value_object_property(Objeto,prop_pos_observada,Lugar,KBP3,KBP4),
+	save_base_pensada(KBP4),
+	atom_concat('accionDejarI(',Objeto,Cadena1),
+	atom_concat(Cadena1,')',Accion),
+	inserta_objetos_propiedades(accionesAtomicas,Accion,yes).
+
+
+
+%Operaciones con las acciones R
+
+limpia([]).
+limpia([H|T]):-
+  borrar_objetos_propiedades(accionesAtomicas,H),
+	limpia(T).
+
+limpiarAtom:-
+	getEnv(KB),
+	properties_of_individual(accionesAtomicas,KB,Y),
+	limpia(Y).
+
+object_properties_sin_borrar(Object,KB,AllProperties):-
+	there_is_object(Object,KB,yes),
+	properties_only_in_the_object(Object,KB,ObjectProperties),
+	filtrar_prop(ObjectProperties,AllProperties).
+object_properties_sin_borrar(,,unknown).
+
+filtrar_prop([],[]).
+filtrar_prop([H|T],[NH|NT]):-
+	regresaPropsinPref(H,NH),
+	filtrar_prop(T,NT).
+
+regresaPropsinPref([Prop,_],Prop).
+
+leerdist(X,Y,KB,D):-
+	properties_of_individual(X,KB,Z),
+	atom_concat('prop_dis_',Y,T1),
+	existePropiedad(T1=>D,Z,yes).
+
+%Operaciones con la base de datos de analizis
+
+%Abrir la base de datos del analizis:
+open_base_pensada(NL):-
+open('C:/Prolog/KB/BaseConocimientosPensada.txt',read,Stream),
+readclauses(Stream,X),
+close(Stream),
+atom_to_term(X,NL).
+
+%Guardar lbreria apodos:
+save_base_pensada(NL):-
+open('C:/Prolog/KB/BaseConocimientosPensada.txt',write,Stream),
+writeq(Stream,NL),
+close(Stream).
+
+
+
+base_Real_a_Pensar:-
+	getEnv(KB),
+	save_base_pensada(KB).
+
+
